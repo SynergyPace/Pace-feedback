@@ -615,7 +615,7 @@ Situatiegegevens:
 - Situatie: ${situatie}`;
 
   try {
-    const res = await fetch('https://JOUW-PROJECT.vercel.app/api/advies', {
+    const res = await fetch('https://pace-feedback.vercel.app/api/advies', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ system: SYSTEM, prompt })
