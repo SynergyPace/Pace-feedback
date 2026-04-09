@@ -548,11 +548,11 @@
 
 <footer class="site-footer">
   <strong style="color:var(--text-sec);">Pace Synergy</strong> · Sibel Berkhout<br>
-  <a href="/cdn-cgi/l/email-protection#5f2c363d3a331f2c722f3e3c3a713133"><span class="__cf_email__" data-cfemail="95e6fcf7f0f9d5e6b8e5f4f6f0bbfbf9">[email&#160;protected]</span></a> · +31 6 10 95 10 89<br>
+  sibel[at]s-pace.nl · +31 6 10 95 10 89<br>
   <a href="https://www.s-pace.nl">s-pace.nl</a>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const sel = { relatie: null, type: null, urgentie: null, eerder: null };
 
 document.querySelectorAll('.chips').forEach(groep => {
@@ -615,7 +615,7 @@ Situatiegegevens:
 - Situatie: ${situatie}`;
 
   try {
-    const res = await fetch('https://pace-feedback.vercel.app/api/advies', {
+    const res = await fetch('https://JOUW-PROJECT.vercel.app/api/advies', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ system: SYSTEM, prompt })
