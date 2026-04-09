@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Feedback Geven — Pace Synergy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #181614;
+    --offwhite: #F8F5F1;
+    --warm: #8B6F47;
+    --warm-light: #F2EBE1;
+    --warm-mid: #C9A97A;
+    --white: #FFFFFF;
+    --border: #E4DAD0;
+    --text: #1E1B18;
+    --muted: #9A8A7A;
+    --text-sec: #6B5E52;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--offwhite);
+    color: var(--text);
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: var(--black);
+    padding: 0 clamp(20px, 5vw, 48px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #2a2520;
+  }
+
+  .site-header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .logo span { color: var(--warm-mid); }
+
+  .header-link {
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .header-link:hover { color: var(--warm-mid); }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--black);
+    padding: clamp(40px, 8vw, 80px) clamp(20px, 5vw, 48px) clamp(48px, 9vw, 96px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 80% 50%, #2a1f14 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--warm-mid);
+    margin-bottom: 20px;
+    padding: 4px 10px;
+    border: 1px solid #3a2e22;
+    border-radius: 99px;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--warm-mid);
+  }
+
+  .hero p {
+    font-size: clamp(13px, 2vw, 15px);
+    color: #7A6E64;
+    line-height: 1.75;
+    max-width: 480px;
+  }
+
+  /* ── Main ── */
+  .main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: clamp(32px, 6vw, 56px) clamp(20px, 5vw, 48px) 80px;
+  }
+
+  /* ── Secties ── */
+  .sectie { margin-bottom: 28px; }
+
+  .sectie-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sectie-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--warm-light);
+    color: var(--warm);
+    font-size: 10px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── Chips ── */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    padding: 7px 16px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text-sec);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .chip:hover { border-color: var(--warm); color: var(--warm); }
+
+  .chip.selected {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+  }
+
+  /* ── Textarea ── */
+  .gev-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warm);
+    background: var(--warm-light);
+    padding: 3px 9px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 14px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.7;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--text);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+
+  textarea:focus { border-color: var(--warm); }
+  textarea::placeholder { color: var(--muted); }
+
+  /* ── Knop ── */
+  .submit-btn {
+    width: 100%;
+    padding: 15px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+    letter-spacing: 0.02em;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .submit-btn:hover { background: #2e2820; }
+  .submit-btn:active { transform: scale(0.99); }
+  .submit-btn:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; transform: none; }
+
+  /* ── Loader ── */
+  .loader {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .loader.zichtbaar { display: flex; }
+
+  .dots { display: flex; gap: 5px; }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--warm-mid);
+    animation: puls 1.2s ease-in-out infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes puls {
+    0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+    40% { opacity: 1; transform: scale(1); }
+  }
+
+  /* ── Error ── */
+  .fout {
+    display: none;
+    background: #FDF2F2;
+    border: 1px solid #F0C0C0;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #8B2020;
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+  .fout.zichtbaar { display: block; }
+
+  /* ── Resultaat ── */
+  .resultaat {
+    display: none;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-top: 28px;
+    animation: omhoog 0.4s ease;
+  }
+
+  .resultaat.zichtbaar { display: block; }
+
+  @keyframes omhoog {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .resultaat-header {
+    background: var(--warm-light);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .resultaat-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warm);
+  }
+
+  .resultaat-sub {
+    font-size: 11px;
+    color: var(--warm-mid);
+    margin-top: 2px;
+  }
+
+  .resultaat-body {
+    padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 32px);
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-sec);
+  }
+
+  /* Advies opmaak */
+  .stap-blok {
+    background: var(--offwhite);
+    border-left: 3px solid var(--black);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 20px 0 10px;
+  }
+
+  .stap-titel {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .gev-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--warm);
+    margin: 14px 0 4px;
+  }
+
+  .citaat-blok {
+    background: var(--warm-light);
+    border-left: 2px solid var(--warm-mid);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin: 8px 0;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .bullet-rij {
+    display: flex;
+    gap: 10px;
+    margin: 4px 0;
+  }
+
+  .bullet-dot {
+    color: var(--warm);
+    font-size: 16px;
+    line-height: 1.8;
+    flex-shrink: 0;
+  }
+
+  .alinea { margin: 4px 0; }
+
+  /* ── Reset ── */
+  .reset-btn {
+    width: 100%;
+    padding: 14px;
+    background: none;
+    border: none;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .reset-btn:hover { color: var(--text); }
+
+  /* ── Divider ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* ── Footer ── */
+  .site-footer {
+    text-align: center;
+    padding: 32px 20px 48px;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    line-height: 1.8;
+  }
+
+  .site-footer a { color: var(--warm); text-decoration: none; }
+
+  /* ── Mobiel ── */
+  @media (max-width: 480px) {
+    .chip { font-size: 12px; padding: 6px 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="logo" href="https://www.s-pace.nl">Pace <span>Synergy</span></a>
+    <a class="header-link" href="https://www.s-pace.nl/contact">Contact</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">GEV-methode</span>
+    <h1>Feedback geven<br>zonder dat het<br><em>kritiek wordt</em></h1>
+    <p>Beantwoord vijf vragen en ontvang direct concreet advies én een voorbeeldtekst — afgestemd op jouw situatie en gebaseerd op de methode van Pace Synergy.</p>
+  </div>
+</section>
+
+<main class="main">
+
+  <!-- Vraag 1 -->
+  <div class="sectie">
+    <div class="sectie-label">
+      <span class="sectie-num">1</span>
+      Wat is je relatie met de ontvanger?
+    </div>
+    <div class="chips" id="relatie">
+      <div class="chip" data-val="collega op gelijk niveau">Collega</div>
+      <div class="chip" data-val="medewerker (jij bent de leidinggevende)">Medewerker</div>
+      <div class="chip" data-val="leidinggevende (de ander is jouw baas)">Leidinggevende</div>
+      <div class="chip" data-val="vriend of familielid">Vriend of familie</div>
+      <div class="chip" data-val="student of leerling">Student / leerling</div>
+      <div class="chip" data-val="klant of externe partij">Klant / extern</div>
+    </div>
+  </div>
+
+  <!-- Vraag 2 -->
+  <div class="sectie">
+    <div class="sectie-label">
+      <span class="sectie-num">2</span>
+      Wat voor soort feedback wil je geven?
+    </div>
+    <div class="chips" id="type">
+      <div class="chip" data-val="opbouwende kritiek op gedrag of werkwijze">Opbouwende kritiek</div>
+      <div class="chip" data-val="een welgemeend compliment of erkenning">Compliment</div>
+      <div class="chip" data-val="corrigerende feedback over iets wat echt moet stoppen of veranderen">Correctie / bijsturing</div>
+      <div class="chip" data-val="feedback over prestaties of resultaten">Prestaties</div>
+      <div class="chip" data-val="feedback over houding of gedrag in de groep">Houding / gedrag</div>
+    </div>
+  </div>
+
+  <!-- Vraag 3 -->
+  <div class="sectie">
+    <div class="sectie-label">
+      <span class="sectie-num">3</span>
+      Hoe gevoelig of urgent is de situatie?
+    </div>
+    <div class="chips" id="urgentie">
+      <div class="chip" data-val="licht — het is bespreekbaar en niet urgent">Licht / niet urgent</div>
+      <div class="chip" data-val="matig — het speelt al een tijdje en vraagt aandacht">Matig urgent</div>
+      <div class="chip" data-val="hoog — het is gevoelig, spannend of heeft serieuze gevolgen">Hoog / gevoelig</div>
+    </div>
+  </div>
+
+  <!-- Vraag 4 -->
+  <div class="sectie">
+    <div class="sectie-label">
+      <span class="sectie-num">4</span>
+      Is dit onderwerp al eerder ter sprake gekomen?
+    </div>
+    <div class="chips" id="eerder">
+      <div class="chip" data-val="nee, dit is de eerste keer dat ik dit aankaart">Nee, eerste keer</div>
+      <div class="chip" data-val="ja, eerder besproken maar er is weinig veranderd">Ja, maar weinig veranderd</div>
+      <div class="chip" data-val="ja, leek opgelost maar speelt opnieuw">Ja, het speelt opnieuw</div>
+    </div>
+  </div>
+
+  <!-- Vraag 5 -->
+  <div class="sectie">
+    <div class="sectie-label">
+      <span class="sectie-num">5</span>
+      Beschrijf de situatie in je eigen woorden
+    </div>
+    <div class="gev-badge">GEV-analyse volgt automatisch</div>
+    <textarea
+      id="situatie"
+      placeholder="Wat is er concreet aan de hand? Wat heeft de ander gedaan of nagelaten, en wat is het effect op jou, het team of de samenwerking?"
+    ></textarea>
+  </div>
+
+  <div class="fout" id="fout"></div>
+
+  <button class="submit-btn" id="submitBtn" onclick="getAdvies()">
+    Geef mij advies en een voorbeeldtekst
+  </button>
+
+  <div class="loader" id="loader">
+    <div class="dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    Advies wordt opgesteld…
+  </div>
+
+  <!-- Resultaat -->
+  <div class="resultaat" id="resultaat">
+    <div class="resultaat-header">
+      <div class="resultaat-title">Jouw advies</div>
+      <div class="resultaat-sub">op basis van de GEV-methode · Pace Synergy</div>
+    </div>
+    <div class="resultaat-body" id="resultaatBody"></div>
+    <button class="reset-btn" onclick="reset()">↩ Nieuwe situatie</button>
+  </div>
+
+  <hr class="divider">
+
+  <p style="font-size:13px; color:var(--muted); line-height:1.8; text-align:center;">
+    Wil je dieper werken aan feedback geven en ontvangen?<br>
+    <a href="https://www.s-pace.nl" style="color:var(--warm);">Ontdek de trainingen van Pace Synergy →</a>
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <strong style="color:var(--text-sec);">Pace Synergy</strong> · Sibel Berkhout<br>
+  <a href="/cdn-cgi/l/email-protection#5f2c363d3a331f2c722f3e3c3a713133"><span class="__cf_email__" data-cfemail="95e6fcf7f0f9d5e6b8e5f4f6f0bbfbf9">[email&#160;protected]</span></a> · +31 6 10 95 10 89<br>
+  <a href="https://www.s-pace.nl">s-pace.nl</a>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const sel = { relatie: null, type: null, urgentie: null, eerder: null };
+
+document.querySelectorAll('.chips').forEach(groep => {
+  groep.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      groep.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      sel[groep.id] = chip.dataset.val;
+    });
+  });
+});
+
+const SYSTEM = `Je bent een expert in effectieve communicatie en feedback, werkend vanuit de methodiek van Pace Synergy. Je analyseert situaties diepgaand en geeft advies op basis van de GEV-methode (Gedrag – Effect – Verlangen).
+
+Je volgt altijd deze vier stappen:
+
+**Stap 1 — Wat speelt er werkelijk?**
+Lees tussen de regels. Wat is het eigenlijke probleem achter wat beschreven wordt? Welke dynamiek, patroon of onderliggende behoefte speelt er mogelijk mee? Wees scherp en direct.
+
+**Stap 2 — Voorbereiding: begin bij jezelf**
+Welke emoties of triggers kunnen meespelen bij de feedbackgever? Wat moet hij/zij eerst bij zichzelf onderzoeken? Gebruik de Pace-aanpak: bewustwording, reflectie, perspectief wisselen, emoties parkeren.
+
+**Stap 3 — Aanpak van het gesprek**
+Wanneer, waar, hoe beginnen? Wat is de juiste toon? Wat zijn de grootste valkuilen in deze specifieke situatie?
+
+**Stap 4 — Voorbeeldtekst via de GEV-methode**
+Schrijf een concrete openingstekst opgebouwd uit:
+- G (Gedrag): concreet observeerbaar gedrag — geen oordeel, gebruik "ik merk dat..."
+- E (Effect): het effect op jou of de samenwerking — vanuit "ik", zonder verwijt
+- V (Verlangen): wat je wel wilt — positief en toekomstgericht
+
+Toon: direct maar niet hard, menselijk maar niet vaag. Feedback, geen kritiek.`;
+
+async function getAdvies() {
+  const situatie = document.getElementById('situatie').value.trim();
+  const fout = document.getElementById('fout');
+  fout.classList.remove('zichtbaar');
+
+  if (!situatie) {
+    document.getElementById('situatie').focus();
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  const loader = document.getElementById('loader');
+  const resultaat = document.getElementById('resultaat');
+
+  btn.disabled = true;
+  btn.textContent = 'Even geduld…';
+  loader.classList.add('zichtbaar');
+  resultaat.classList.remove('zichtbaar');
+
+  const prompt = `Ik wil feedback geven. Analyseer mijn situatie en geef advies op basis van de GEV-methode.
+
+Situatiegegevens:
+- Relatie: ${sel.relatie || 'niet ingevuld'}
+- Soort feedback: ${sel.type || 'niet ingevuld'}
+- Urgentie/gevoeligheid: ${sel.urgentie || 'niet ingevuld'}
+- Eerder besproken: ${sel.eerder || 'niet ingevuld'}
+- Situatie: ${situatie}`;
+
+  try {
+    const res = await fetch('https://JOUW-PROJECT.vercel.app/api/advies', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM, prompt })
+    });
+
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    renderAdvies(data.tekst);
+    resultaat.classList.add('zichtbaar');
+    resultaat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch (e) {
+    fout.textContent = 'Er ging iets mis: ' + e.message;
+    fout.classList.add('zichtbaar');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Geef mij advies en een voorbeeldtekst';
+    loader.classList.remove('zichtbaar');
+  }
+}
+
+function renderAdvies(tekst) {
+  const body = document.getElementById('resultaatBody');
+  body.innerHTML = '';
+
+  tekst.split('\n').forEach(regel => {
+    if (!regel.trim()) {
+      body.appendChild(Object.assign(document.createElement('div'), { style: 'height:8px' }));
+      return;
+    }
+
+    // Stap-koppen **Stap N — ...**
+    const stap = regel.match(/^\*\*(Stap \d[^*]*)\*\*/);
+    if (stap) {
+      const blok = document.createElement('div');
+      blok.className = 'stap-blok';
+      blok.innerHTML = `<div class="stap-titel">${stap[1]}</div>`;
+      body.appendChild(blok);
+      return;
+    }
+
+    // GEV labels **G —**, **E —**, **V —**
+    const gev = regel.match(/^\*\*([GEV] —[^*]*)\*\*/);
+    if (gev) {
+      const el = document.createElement('div');
+      el.className = 'gev-label';
+      el.textContent = gev[1];
+      body.appendChild(el);
+      return;
+    }
+
+    // Citaat > ...
+    if (regel.startsWith('>')) {
+      const el = document.createElement('div');
+      el.className = 'citaat-blok';
+      el.textContent = regel.replace(/^>\s*/, '');
+      body.appendChild(el);
+      return;
+    }
+
+    // Bullet - ...
+    if (regel.startsWith('- ')) {
+      const rij = document.createElement('div');
+      rij.className = 'bullet-rij';
+      rij.innerHTML = `<span class="bullet-dot">·</span><span class="alinea">${parseBold(regel.slice(2))}</span>`;
+      body.appendChild(rij);
+      return;
+    }
+
+    // Gewone alinea
+    const el = document.createElement('p');
+    el.className = 'alinea';
+    el.innerHTML = parseBold(regel);
+    body.appendChild(el);
+  });
+}
+
+function parseBold(tekst) {
+  return tekst.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
+function reset() {
+  document.getElementById('situatie').value = '';
+  document.getElementById('resultaat').classList.remove('zichtbaar');
+  document.getElementById('fout').classL
