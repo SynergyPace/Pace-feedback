@@ -514,7 +514,7 @@
 
   <div class="fout" id="fout"></div>
 
-  <button class="submit-btn" id="submitBtn" onclick="getAdvies()">
+  <button class="submit-btn" id="submitBtn">
     Geef mij advies en een voorbeeldtekst
   </button>
 
@@ -534,7 +534,7 @@
       <div class="resultaat-sub">op basis van de GEV-methode · Pace Synergy</div>
     </div>
     <div class="resultaat-body" id="resultaatBody"></div>
-    <button class="reset-btn" onclick="reset()">↩ Nieuwe situatie</button>
+    <button class="reset-btn" id="resetBtn">↩ Nieuwe situatie</button>
   </div>
 
   <hr class="divider">
@@ -553,155 +553,149 @@
 </footer>
 
 <script>
-const sel = { relatie: null, type: null, urgentie: null, eerder: null };
+document.addEventListener('DOMContentLoaded', function() {
+  var sel = { relatie: null, type: null, urgentie: null, eerder: null };
 
-document.querySelectorAll('.chips').forEach(groep => {
-  groep.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      groep.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
-      chip.classList.add('selected');
-      sel[groep.id] = chip.dataset.val;
+  document.querySelectorAll('.chips').forEach(function(groep) {
+    groep.querySelectorAll('.chip').forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        groep.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+        chip.classList.add('selected');
+        sel[groep.id] = chip.dataset.val;
+      });
     });
   });
-});
 
-const SYSTEM = `Je bent een expert in effectieve communicatie en feedback, werkend vanuit de methodiek van Pace Synergy. Je analyseert situaties diepgaand en geeft advies op basis van de GEV-methode (Gedrag – Effect – Verlangen).
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    getAdvies();
+  });
 
-Je volgt altijd deze vier stappen:
-
-**Stap 1 — Wat speelt er werkelijk?**
-Lees tussen de regels. Wat is het eigenlijke probleem achter wat beschreven wordt? Welke dynamiek, patroon of onderliggende behoefte speelt er mogelijk mee? Wees scherp en direct.
-
-**Stap 2 — Voorbereiding: begin bij jezelf**
-Welke emoties of triggers kunnen meespelen bij de feedbackgever? Wat moet hij/zij eerst bij zichzelf onderzoeken? Gebruik de Pace-aanpak: bewustwording, reflectie, perspectief wisselen, emoties parkeren.
-
-**Stap 3 — Aanpak van het gesprek**
-Wanneer, waar, hoe beginnen? Wat is de juiste toon? Wat zijn de grootste valkuilen in deze specifieke situatie?
-
-**Stap 4 — Voorbeeldtekst via de GEV-methode**
-Schrijf een concrete openingstekst opgebouwd uit:
-- G (Gedrag): concreet observeerbaar gedrag — geen oordeel, gebruik "ik merk dat..."
-- E (Effect): het effect op jou of de samenwerking — vanuit "ik", zonder verwijt
-- V (Verlangen): wat je wel wilt — positief en toekomstgericht
-
-Toon: direct maar niet hard, menselijk maar niet vaag. Feedback, geen kritiek.`;
-
-async function getAdvies() {
-  const situatie = document.getElementById('situatie').value.trim();
-  const fout = document.getElementById('fout');
-  fout.classList.remove('zichtbaar');
-
-  if (!situatie) {
-    document.getElementById('situatie').focus();
-    return;
+  var resetBtn = document.getElementById('resetBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function() {
+      resetForm();
+    });
   }
 
-  const btn = document.getElementById('submitBtn');
-  const loader = document.getElementById('loader');
-  const resultaat = document.getElementById('resultaat');
+  var SYSTEM = 'Je bent een expert in effectieve communicatie en feedback, werkend vanuit de methodiek van Pace Synergy. Je analyseert situaties diepgaand en geeft advies op basis van de GEV-methode (Gedrag - Effect - Verlangen).\n\nJe volgt altijd deze vier stappen:\n\n**Stap 1 - Wat speelt er werkelijk?**\nLees tussen de regels. Wat is het eigenlijke probleem achter wat beschreven wordt? Welke dynamiek, patroon of onderliggende behoefte speelt er mogelijk mee? Wees scherp en direct.\n\n**Stap 2 - Voorbereiding: begin bij jezelf**\nWelke emoties of triggers kunnen meespelen bij de feedbackgever? Wat moet hij/zij eerst bij zichzelf onderzoeken? Gebruik de Pace-aanpak: bewustwording, reflectie, perspectief wisselen, emoties parkeren.\n\n**Stap 3 - Aanpak van het gesprek**\nWanneer, waar, hoe beginnen? Wat is de juiste toon? Wat zijn de grootste valkuilen in deze specifieke situatie?\n\n**Stap 4 - Voorbeeldtekst via de GEV-methode**\nSchrijf een concrete openingstekst opgebouwd uit:\n- G (Gedrag): concreet observeerbaar gedrag, geen oordeel, gebruik ik merk dat...\n- E (Effect): het effect op jou of de samenwerking, vanuit ik, zonder verwijt\n- V (Verlangen): wat je wel wilt, positief en toekomstgericht\n\nToon: direct maar niet hard, menselijk maar niet vaag. Feedback, geen kritiek.';
 
-  btn.disabled = true;
-  btn.textContent = 'Even geduld…';
-  loader.classList.add('zichtbaar');
-  resultaat.classList.remove('zichtbaar');
+  function getAdvies() {
+    var situatieEl = document.getElementById('situatie');
+    var situatie = situatieEl.value.trim();
+    var fout = document.getElementById('fout');
+    fout.classList.remove('zichtbaar');
 
-  const prompt = `Ik wil feedback geven. Analyseer mijn situatie en geef advies op basis van de GEV-methode.
+    if (!situatie) {
+      situatieEl.focus();
+      return;
+    }
 
-Situatiegegevens:
-- Relatie: ${sel.relatie || 'niet ingevuld'}
-- Soort feedback: ${sel.type || 'niet ingevuld'}
-- Urgentie/gevoeligheid: ${sel.urgentie || 'niet ingevuld'}
-- Eerder besproken: ${sel.eerder || 'niet ingevuld'}
-- Situatie: ${situatie}`;
+    var btn = document.getElementById('submitBtn');
+    var loader = document.getElementById('loader');
+    var resultaat = document.getElementById('resultaat');
 
-  try {
-    const res = await fetch('https://pace-feedback.vercel.app/api/advies', {
+    btn.disabled = true;
+    btn.textContent = 'Even geduld...';
+    loader.classList.add('zichtbaar');
+    resultaat.classList.remove('zichtbaar');
+
+    var prompt = 'Ik wil feedback geven. Analyseer mijn situatie en geef advies op basis van de GEV-methode.\n\nSituatiegegevens:\n- Relatie: ' + (sel.relatie || 'niet ingevuld') + '\n- Soort feedback: ' + (sel.type || 'niet ingevuld') + '\n- Urgentie/gevoeligheid: ' + (sel.urgentie || 'niet ingevuld') + '\n- Eerder besproken: ' + (sel.eerder || 'niet ingevuld') + '\n- Situatie: ' + situatie;
+
+    fetch('https://pace-feedback.vercel.app/api/advies', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: SYSTEM, prompt })
+      body: JSON.stringify({ system: SYSTEM, prompt: prompt })
+    })
+    .then(function(res) {
+      if (!res.ok) {
+        return res.json().catch(function() { return {}; }).then(function(data) {
+          throw new Error(data.error || 'HTTP ' + res.status);
+        });
+      }
+      return res.json();
+    })
+    .then(function(data) {
+      renderAdvies(data.tekst);
+      resultaat.classList.add('zichtbaar');
+      resultaat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    })
+    .catch(function(e) {
+      fout.textContent = 'Er ging iets mis: ' + e.message;
+      fout.classList.add('zichtbaar');
+    })
+    .finally(function() {
+      btn.disabled = false;
+      btn.textContent = 'Geef mij advies en een voorbeeldtekst';
+      loader.classList.remove('zichtbaar');
     });
-
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      throw new Error(data.error || `HTTP ${res.status}`);
-    }
-
-    const data = await res.json();
-    renderAdvies(data.tekst);
-    resultaat.classList.add('zichtbaar');
-    resultaat.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  } catch (e) {
-    fout.textContent = 'Er ging iets mis: ' + e.message;
-    fout.classList.add('zichtbaar');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Geef mij advies en een voorbeeldtekst';
-    loader.classList.remove('zichtbaar');
   }
-}
 
-function renderAdvies(tekst) {
-  const body = document.getElementById('resultaatBody');
-  body.innerHTML = '';
+  function renderAdvies(tekst) {
+    var body = document.getElementById('resultaatBody');
+    body.innerHTML = '';
 
-  tekst.split('\n').forEach(regel => {
-    if (!regel.trim()) {
-      body.appendChild(Object.assign(document.createElement('div'), { style: 'height:8px' }));
-      return;
-    }
+    tekst.split('\n').forEach(function(regel) {
+      if (!regel.trim()) {
+        var spacer = document.createElement('div');
+        spacer.style.height = '8px';
+        body.appendChild(spacer);
+        return;
+      }
 
-    // Stap-koppen **Stap N — ...**
-    const stap = regel.match(/^\*\*(Stap \d[^*]*)\*\*/);
-    if (stap) {
-      const blok = document.createElement('div');
-      blok.className = 'stap-blok';
-      blok.innerHTML = `<div class="stap-titel">${stap[1]}</div>`;
-      body.appendChild(blok);
-      return;
-    }
+      var stap = regel.match(/^\*\*(Stap \d[^*]*)\*\*/);
+      if (stap) {
+        var blok = document.createElement('div');
+        blok.className = 'stap-blok';
+        blok.innerHTML = '<div class="stap-titel">' + stap[1] + '</div>';
+        body.appendChild(blok);
+        return;
+      }
 
-    // GEV labels **G —**, **E —**, **V —**
-    const gev = regel.match(/^\*\*([GEV] —[^*]*)\*\*/);
-    if (gev) {
-      const el = document.createElement('div');
-      el.className = 'gev-label';
-      el.textContent = gev[1];
-      body.appendChild(el);
-      return;
-    }
+      var gev = regel.match(/^\*\*([GEV] [^*]*)\*\*/);
+      if (gev) {
+        var el = document.createElement('div');
+        el.className = 'gev-label';
+        el.textContent = gev[1];
+        body.appendChild(el);
+        return;
+      }
 
-    // Citaat > ...
-    if (regel.startsWith('>')) {
-      const el = document.createElement('div');
-      el.className = 'citaat-blok';
-      el.textContent = regel.replace(/^>\s*/, '');
-      body.appendChild(el);
-      return;
-    }
+      if (regel.startsWith('>')) {
+        var el = document.createElement('div');
+        el.className = 'citaat-blok';
+        el.textContent = regel.replace(/^>\s*/, '');
+        body.appendChild(el);
+        return;
+      }
 
-    // Bullet - ...
-    if (regel.startsWith('- ')) {
-      const rij = document.createElement('div');
-      rij.className = 'bullet-rij';
-      rij.innerHTML = `<span class="bullet-dot">·</span><span class="alinea">${parseBold(regel.slice(2))}</span>`;
-      body.appendChild(rij);
-      return;
-    }
+      if (regel.startsWith('- ')) {
+        var rij = document.createElement('div');
+        rij.className = 'bullet-rij';
+        rij.innerHTML = '<span class="bullet-dot">·</span><span class="alinea">' + parseBold(regel.slice(2)) + '</span>';
+        body.appendChild(rij);
+        return;
+      }
 
-    // Gewone alinea
-    const el = document.createElement('p');
-    el.className = 'alinea';
-    el.innerHTML = parseBold(regel);
-    body.appendChild(el);
-  });
-}
+      var p = document.createElement('p');
+      p.className = 'alinea';
+      p.innerHTML = parseBold(regel);
+      body.appendChild(p);
+    });
+  }
 
-function parseBold(tekst) {
-  return tekst.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-}
+  function parseBold(tekst) {
+    return tekst.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  }
 
-function reset() {
-  document.getElementById('situatie').value = '';
-  document.getElementById('resultaat').classList.remove('zichtbaar');
-  document.getElementById('fout').classL
+  function resetForm() {
+    document.getElementById('situatie').value = '';
+    document.getElementById('resultaat').classList.remove('zichtbaar');
+    document.getElementById('fout').classList.remove('zichtbaar');
+    document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+    sel.relatie = null; sel.type = null; sel.urgentie = null; sel.eerder = null;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
+</script>
+</body>
+</html>
