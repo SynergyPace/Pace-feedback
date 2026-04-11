@@ -8,11 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --black: #181614;
+    --black: #003a40;
     --offwhite: #F8F5F1;
     --warm: #8B6F47;
     --warm-light: #F2EBE1;
-    --warm-mid: #C9A97A;
+    --warm-mid: #e2b46a;
     --white: #FFFFFF;
     --border: #E4DAD0;
     --text: #1E1B18;
@@ -41,7 +41,7 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid #2a2520;
+    border-bottom: 1px solid #004a52;
   }
 
   .site-header-inner {
@@ -85,7 +85,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 60% 80% at 80% 50%, #2a1f14 0%, transparent 70%);
+    background: radial-gradient(ellipse 60% 80% at 80% 50%, #002830 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -104,7 +104,7 @@
     color: var(--warm-mid);
     margin-bottom: 20px;
     padding: 4px 10px;
-    border: 1px solid #3a2e22;
+    border: 1px solid #004a52;
     border-radius: 99px;
   }
 
@@ -248,7 +248,7 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  .submit-btn:hover { background: #2e2820; }
+  .submit-btn:hover { background: #00525c; }
   .submit-btn:active { transform: scale(0.99); }
   .submit-btn:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; transform: none; }
 
@@ -435,7 +435,7 @@
 <section class="hero">
   <div class="hero-inner">
     <span class="hero-tag">GEV-methode</span>
-    <h1>Feedback geven<br>zonder dat het<br><em>kritiek wordt</em></h1>
+    <h1>Feedback geven<br>zonder dat het<br><em>kritiek</em> wordt</h1>
     <p>Beantwoord vijf vragen en ontvang direct concreet advies én een voorbeeldtekst — afgestemd op jouw situatie en gebaseerd op de methode van Pace Synergy.</p>
   </div>
 </section>
@@ -454,7 +454,6 @@
       <div class="chip" data-val="leidinggevende (de ander is jouw baas)">Leidinggevende</div>
       <div class="chip" data-val="vriend of familielid">Vriend of familie</div>
       <div class="chip" data-val="student of leerling">Student / leerling</div>
-      <div class="chip" data-val="klant of externe partij">Klant / extern</div>
     </div>
   </div>
 
@@ -465,10 +464,9 @@
       Wat voor soort feedback wil je geven?
     </div>
     <div class="chips" id="type">
-      <div class="chip" data-val="opbouwende kritiek op gedrag of werkwijze">Opbouwende kritiek</div>
+      <div class="chip" data-val="opbouwende kritiek op gedrag of werkwijze">Opbouwend</div>
       <div class="chip" data-val="een welgemeend compliment of erkenning">Compliment</div>
       <div class="chip" data-val="corrigerende feedback over iets wat echt moet stoppen of veranderen">Correctie / bijsturing</div>
-      <div class="chip" data-val="feedback over prestaties of resultaten">Prestaties</div>
       <div class="chip" data-val="feedback over houding of gedrag in de groep">Houding / gedrag</div>
     </div>
   </div>
@@ -515,7 +513,7 @@
   <div class="fout" id="fout"></div>
 
   <button class="submit-btn" id="submitBtn">
-    Geef mij advies en een voorbeeldtekst
+    Genereer feedback
   </button>
 
   <div class="loader" id="loader">
@@ -540,16 +538,15 @@
   <hr class="divider">
 
   <p style="font-size:13px; color:var(--muted); line-height:1.8; text-align:center;">
-    Wil je dieper werken aan feedback geven en ontvangen?<br>
-    <a href="https://www.s-pace.nl" style="color:var(--warm);">Ontdek de trainingen van Pace Synergy →</a>
+    Wil je meer begeleiding?<br>
+    <a href="https://www.s-pace.nl" style="color:var(--warm);">Ontdek de mogelijkheden bij Pace Synergy →</a>
   </p>
 
 </main>
 
 <footer class="site-footer">
   <strong style="color:var(--text-sec);">Pace Synergy</strong> · Sibel Berkhout<br>
-  sibel[at]s-pace.nl · +31 6 10 95 10 89<br>
-  <a href="https://www.s-pace.nl">s-pace.nl</a>
+  sibel@s-pace.nl · +31 6 10 95 10 89<br>
 </footer>
 
 <script>
@@ -577,7 +574,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  var SYSTEM = 'Je bent een expert in effectieve communicatie en feedback, werkend vanuit de methodiek van Pace Synergy. Je analyseert situaties diepgaand en geeft advies op basis van de GEV-methode (Gedrag - Effect - Verlangen).\n\nJe volgt altijd deze vier stappen:\n\n**Stap 1 - Wat speelt er werkelijk?**\nLees tussen de regels. Wat is het eigenlijke probleem achter wat beschreven wordt? Welke dynamiek, patroon of onderliggende behoefte speelt er mogelijk mee? Wees scherp en direct.\n\n**Stap 2 - Voorbereiding: begin bij jezelf**\nWelke emoties of triggers kunnen meespelen bij de feedbackgever? Wat moet hij/zij eerst bij zichzelf onderzoeken? Gebruik de Pace-aanpak: bewustwording, reflectie, perspectief wisselen, emoties parkeren.\n\n**Stap 3 - Aanpak van het gesprek**\nWanneer, waar, hoe beginnen? Wat is de juiste toon? Wat zijn de grootste valkuilen in deze specifieke situatie?\n\n**Stap 4 - Voorbeeldtekst via de GEV-methode**\nSchrijf een concrete openingstekst opgebouwd uit:\n- G (Gedrag): concreet observeerbaar gedrag, geen oordeel, gebruik ik merk dat...\n- E (Effect): het effect op jou of de samenwerking, vanuit ik, zonder verwijt\n- V (Verlangen): wat je wel wilt, positief en toekomstgericht\n\nToon: direct maar niet hard, menselijk maar niet vaag. Feedback, geen kritiek.';
+  var SYSTEM = 'Je bent een expert in effectieve communicatie en feedback, werkend vanuit de methodiek van Pace Synergy. Je analyseert situaties diepgaand en geeft advies op basis van de GEV-methode (Gedrag - Effect - Verlangen).\n\nJe volgt altijd deze vier stappen:\n\n**Stap 1 - Wat speelt er werkelijk?**\nLees tussen de regels. Wat is het eigenlijke probleem achter wat beschreven wordt? Welke dynamiek, patroon of onderliggende behoefte speelt er mogelijk mee? Welke verwachtingen, aannames, percepties, triggers en projecties spelen een rol bij de aanvrager? Wees scherp en direct.\n\n**Stap 2 - Voorbereiding: begin bij jezelf**\nWelke emoties of triggers kunnen meespelen bij de feedbackgever? Wat moet hij/zij eerst bij zichzelf onderzoeken? Gebruik de Pace-aanpak: bewustwording, reflectie, perspectief wisselen, emoties parkeren.\n\nErken naar jezelf je eigen emotie en behoefte. Adem rustig in en uit. Laat het er zijn, zonder erover te oordelen. Gebruik hiervoor de SEW-methode als praktische tool om jezelf te helpen wanneer je blokkeert - bijvoorbeeld als iemand heftiger reageert dan je verwacht, of als je zelf moeite hebt om een gesprek constructief te starten:\n- S = Sensatie: Wat voel je fysiek in je lichaam? (Bijvoorbeeld spanning, druk op de borst, trillingen)\n- E = Emotie: Welke emotie hoort erbij? (Bijvoorbeeld frustratie, onzekerheid, angst)\n- W = Willen: Wat wil je op dat moment eigenlijk? Wat heb je nodig?\nDoor deze stappen bewust langs te gaan, kun je jezelf ondertitelen: je geeft taal aan wat er in je speelt. Een benoemde emotie is een zakkende emotie. Door te erkennen en verwoorden wat je voelt, verlaag je de intensiteit van de emotie en krijg je weer grip op de situatie.\n\n**Stap 3 - Aanpak van het gesprek**\nWanneer, waar, hoe beginnen? Wat is de juiste toon? Wat zijn de grootste valkuilen in deze specifieke situatie?\n\n**Stap 4 - Voorbeeldtekst via de GEV-methode**\nSchrijf een concrete openingstekst opgebouwd uit:\n- G (Gedrag): concreet observeerbaar gedrag, geen oordeel, gebruik ik merk dat...\n- E (Effect): het effect op jou of de samenwerking, vanuit ik, zonder verwijt\n- V (Verlangen): wat je wel wilt, positief en toekomstgericht\n\nToon: direct maar niet hard, menselijk maar niet vaag. Feedback, geen kritiek.\n\nSluit het advies altijd af met:\n---\nAan het gegenereerde advies kunnen geen rechten worden ontleend.\n© Pace Synergy - De GEV-methode is een eigendom van Pace Synergy.';
 
   function getAdvies() {
     var situatieEl = document.getElementById('situatie');
@@ -625,7 +622,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .finally(function() {
       btn.disabled = false;
-      btn.textContent = 'Geef mij advies en een voorbeeldtekst';
+      btn.textContent = 'Genereer feedback';
       loader.classList.remove('zichtbaar');
     });
   }
