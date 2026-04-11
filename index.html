@@ -688,4 +688,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('situatie').value = '';
     document.getElementById('resultaat').classList.remove('zichtbaar');
     document.getElementById('fout').classList.remove('zichtbaar');
-    document.querySelectorAll('.chip')
+    document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+    sel.relatie = null; sel.type = null; sel.urgentie = null; sel.eerder = null;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
+</script>
+</body>
+</html>
