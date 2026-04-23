@@ -564,7 +564,7 @@
 
   <p style="font-size:11px; color:var(--muted); line-height:1.8; text-align:center; margin-top:16px;">
     Aan het gegenereerde advies kunnen geen rechten worden ontleend.<br>
-    © Pace Synergy — De GEV-methode is eigendom van Pace Synergy.
+    © Pace Synergy — Deze methode is eigendom van Pace Synergy.
   </p>
 
 </main>
@@ -598,6 +598,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var SYSTEM = 'Je bent een expert in effectieve communicatie en feedback, werkend vanuit de methodiek van Pace Synergy. Je analyseert situaties diepgaand en geeft advies op basis van de GEV-methode (Gedrag - Effect - Verlangen).\n\nBelangrijk: volg altijd exact dezelfde structuur, ongeacht de situatie. Elke stap is verplicht en moet altijd aanwezig zijn in de output. Wijk nooit af van deze volgorde en structuur. Gebruik altijd de exacte kopjes zoals hieronder beschreven.\n\nJe volgt altijd deze drie stappen:\n\n**Stap 1 - Wat speelt er werkelijk?**\nAnalyseer de situatie diepgaand. Wat is het eigenlijke probleem achter wat beschreven wordt? Welke dynamiek, patroon of onderliggende behoefte speelt er mogelijk mee? Welke verwachtingen, aannames, percepties, triggers en projecties spelen een rol - zowel in de situatie zelf als bij de aanvrager? Welke eigen emoties, blinde vlekken of invullingen kunnen de kijk van de feedbackgever kleuren? Wees scherp en direct, maar benoem dit altijd vanuit de situatie, nooit als oordeel over de persoon.\n\n**Stap 2 - Voorbereiding op het gesprek**\nWanneer, waar en hoe te beginnen? Wat is de juiste toon en houding? Wat zijn de grootste valkuilen in deze specifieke situatie? Houd dit beknopt en praktisch.\n\nVoeg altijd toe dat het sterk de voorkeur heeft om feedback face-to-face te geven. Juist omdat feedbackgesprekken vaak gevoelig liggen, is het belangrijk dat toon en houding goed kunnen worden waargenomen en geinterpreteerd. Een gesprek in persoon voorkomt misverstanden die bij geschreven of telefonische communicatie sneller ontstaan.\n\nAls de situatie emotioneel geladen is - de aanvrager klinkt gefrustreerd, verongelijkt of persoonlijk geraakt, of de situatie betreft zware themas zoals bedrog, verraad, machtsstrijd of diep conflict - benoem dan ook dat het belangrijk is om eerst bij zichzelf te beginnen: erken je eigen emotie en behoefte, adem rustig in en uit als basis, en laat het er zijn zonder te oordelen. Verwijs hiervoor naar de SEW-methode (Sensatie - Emotie - Willen) als praktisch hulpmiddel om grip te krijgen op de eigen emotie voordat het gesprek wordt aangegaan.\n\n**Stap 3 - Voorbeeldtekst via de GEV-methode**\nGeef ALTIJD een concrete voorbeeldtekst, ook als de informatie indirect is of de situatie complex. De enige uitzondering is als de aanvrager aantoonbaar labelt, veroordeelt of volledig geen concreet gedrag kan benoemen. Als de informatie indirect is (via anderen gehoord), formuleer de G dan neutraal vanuit wat de aanvrager zelf heeft waargenomen of gehoord, zonder dit te presenteren als eigen directe observatie.\n\nSchrijf een concrete openingstekst, zoals een mediator zou doen, opgebouwd uit:\n- G (Gedrag): concreet observeerbaar gedrag of concrete signalen: geen oordeel, geen verwijt, geen aannames of invulling, geen projectie, wel neutraal en objectief geformuleerd. Als informatie indirect is, formuleer dan vanuit wat de aanvrager heeft gehoord of gezien, zonder het als eigen directe waarneming te presenteren.\n- E (Effect): het effect op jou EN op de betrokken medewerkers of het team, zonder verwijt, zonder oordeel, zonder aannames, zonder invulling, zonder projectie, zonder frustratie of andere emotie. Maak het effect persoonlijk en concreet: wat is het effect op de feedbackgever zelf, maar ook wat is het effect op de mensen over wie de feedback gaat? Gebruik Daardoor...\n- V (Verlangen): wat je wel wilt, positief en toekomstgericht, alleen verband houdend met het benoemde gedrag en effect. Benoem concreet en specifiek waar je wel behoefte aan hebt. Dat mag soms verwijzen naar gewenst gedrag of positief effect in de vorm van een algemeen principe. Afhankelijk van de feedback: deel wat voor positief effect het zou hebben als de behoefte zou worden vervuld op jou, het resultaat, het team, of de samenwerking. Geef geen advies of tip wat de ander moet doen, houd het bij de aanvrager.\n\nAls de situatie emotioneel te geladen is - de aanvrager labelt, veroordeelt, of kan werkelijk geen enkel concreet gedrag of signaal benoemen - geef je GEEN voorbeeldtekst. Je benoemt dit helder maar warm: je ziet wat de aanvrager voelt, dat is begrijpelijk, maar het gesprek zou nu nog niet het gewenste effect hebben. Je legt uit wat er eerst nodig is via de SEW-methode onder stap 2.\n\nToon: schrijf zoals een ervaren coach en mediator die oprecht begaan is met beiden. Direct en helder, maar altijd opbouwend en empathisch. Je benoemt wat je ziet zonder te veroordelen, zonder verwijten, zonder toon van kritische ouder. Je geeft de aanvrager het gevoel dat je aan hun kant staat en hen verder wil helpen. Vermijd harde of afwijzende formuleringen of stellingen. Verplaats je in de ontvanger en schrijf als een redelijke volwassene, zodat de boodschap makkelijk is te ontvangen en begrip voor is op te brengen. Gebruik een warme, constructieve toon die ruimte geeft in plaats van druk zet. Geen oordeel over de persoon of gedrag. Wees hard op de inhoud en zacht op de relatie.';
 
   function getAdvies() {
+    var t = teksten[huidigeTaal];
     var situatieEl = document.getElementById('situatie');
     var situatie = situatieEl.value.trim();
     var fout = document.getElementById('fout');
@@ -613,16 +614,23 @@ document.addEventListener('DOMContentLoaded', function() {
     var resultaat = document.getElementById('resultaat');
 
     btn.disabled = true;
-    btn.textContent = 'Even geduld...';
+    btn.textContent = huidigeTaal === 'nl' ? 'Even geduld\u2026' : 'Please wait\u2026';
     loader.classList.add('zichtbaar');
     resultaat.classList.remove('zichtbaar');
 
-    var prompt = 'Ik wil feedback geven. Analyseer mijn situatie en geef mij advies.\n\nSituatiegegevens:\n- Relatie: ' + (sel.relatie || 'niet ingevuld') + '\n- Soort feedback: ' + (sel.type || 'niet ingevuld') + '\n- Urgentie/gevoeligheid: ' + (sel.urgentie || 'niet ingevuld') + '\n- Eerder besproken: ' + (sel.eerder || 'niet ingevuld') + '\n- Situatie: ' + situatie;
+    var prompt = t.promptIntro + '\n\nSituatiegegevens:\n- ' +
+      t.promptRelatie + ': ' + (sel.relatie || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n- ' +
+      t.promptType + ': ' + (sel.type || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n- ' +
+      t.promptUrgentie + ': ' + (sel.urgentie || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n- ' +
+      t.promptEerder + ': ' + (sel.eerder || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n- ' +
+      t.promptSituatie + ': ' + situatie;
+
+    var systemPrompt = (huidigeTaal === 'en' && teksten.en.system) ? teksten.en.system : SYSTEM;
 
     fetch('https://pace-feedback.vercel.app/api/advies', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: SYSTEM, prompt: prompt })
+      body: JSON.stringify({ system: systemPrompt, prompt: prompt })
     })
     .then(function(res) {
       if (!res.ok) {
@@ -742,7 +750,7 @@ var teksten = {
     ctaText: 'Wil je meer begeleiding?',
     ctaLink: 'Ontdek de mogelijkheden bij Pace Synergy →',
     disclaimer: 'Aan het gegenereerde advies kunnen geen rechten worden ontleend.',
-    copyright: '© Pace Synergy — De GEV-methode is eigendom van Pace Synergy.',
+    copyright: '© Pace Synergy — Deze methode is eigendom van Pace Synergy.',
     promptIntro: 'Ik wil feedback geven. Analyseer mijn situatie en geef mij advies.',
     promptRelatie: 'Relatie',
     promptType: 'Soort feedback',
@@ -776,7 +784,7 @@ var teksten = {
     ctaText: 'Would you like more guidance?',
     ctaLink: 'Discover the possibilities at Pace Synergy →',
     disclaimer: 'No rights can be derived from the generated advice.',
-    copyright: '© Pace Synergy — The feedback method is the intellectual property of Pace Synergy.',
+    copyright: '© Pace Synergy — This method is the intellectual property of Pace Synergy.',
     promptIntro: 'I want to give feedback. Analyse my situation and give me advice.',
     promptRelatie: 'Relationship',
     promptType: 'Type of feedback',
@@ -885,70 +893,6 @@ function setTaal(taal) {
 }
 
 // Overschrijf getAdvies om taal mee te nemen
-var _origGetAdvies = getAdvies;
-function getAdvies() {
-  _origGetAdvies();
-}
-
-// Patch de prompt en system voor taal — override na DOMContentLoaded
-document.addEventListener('DOMContentLoaded', function() {
-  // Herdefinieer de fetch call met taalondersteuning
-  var origSubmit = document.getElementById('submitBtn');
-  origSubmit.removeEventListener('click', getAdvies);
-  origSubmit.addEventListener('click', function() {
-    var t = teksten[huidigeTaal];
-    var situatie = document.getElementById('situatie').value.trim();
-    var fout = document.getElementById('fout');
-    fout.classList.remove('zichtbaar');
-    if (!situatie) { document.getElementById('situatie').focus(); return; }
-
-    var btn = document.getElementById('submitBtn');
-    var loader = document.getElementById('loader');
-    var resultaat = document.getElementById('resultaat');
-
-    btn.disabled = true;
-    btn.textContent = huidigeTaal === 'nl' ? 'Even geduld…' : 'Please wait…';
-    loader.classList.add('zichtbaar');
-    resultaat.classList.remove('zichtbaar');
-
-    var prompt = t.promptIntro + '\n\n' +
-      t.promptRelatie + ': ' + (sel.relatie || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n' +
-      t.promptType + ': ' + (sel.type || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n' +
-      t.promptUrgentie + ': ' + (sel.urgentie || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n' +
-      t.promptEerder + ': ' + (sel.eerder || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n' +
-      t.promptSituatie + ': ' + situatie;
-
-    var systemPrompt = t.system || SYSTEM;
-
-    fetch('https://pace-feedback.vercel.app/api/advies', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: systemPrompt, prompt: prompt })
-    })
-    .then(function(res) {
-      if (!res.ok) {
-        return res.json().catch(function() { return {}; }).then(function(data) {
-          throw new Error(data.error || 'HTTP ' + res.status);
-        });
-      }
-      return res.json();
-    })
-    .then(function(data) {
-      renderAdvies(data.tekst);
-      resultaat.classList.add('zichtbaar');
-      resultaat.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    })
-    .catch(function(e) {
-      fout.textContent = t.foutPrefix + e.message;
-      fout.classList.add('zichtbaar');
-    })
-    .finally(function() {
-      btn.disabled = false;
-      btn.textContent = t.submitBtn;
-      loader.classList.remove('zichtbaar');
-    });
-  });
-});
 </script>
 </body>
 </html>
