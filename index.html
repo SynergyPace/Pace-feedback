@@ -406,6 +406,33 @@
   .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 
   /* ── Mobiel ── */
+  /* ── Taalswitch ── */
+  .taal-switch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .taal-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px 7px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    font-family: 'DM Sans', sans-serif;
+    color: rgba(255,255,255,0.35);
+    transition: color 0.2s, background 0.15s;
+    line-height: 1;
+    border-radius: 4px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .taal-btn.actief {
+    color: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.12);
+  }
+  .taal-btn:hover { color: rgba(255,255,255,0.7); }
+
   @media (max-width: 480px) {
     .chip { font-size: 12px; padding: 6px 13px; }
   }
@@ -416,15 +443,20 @@
 <header class="site-header">
   <div class="site-header-inner">
     <a class="logo" href="https://www.s-pace.nl">Pace <span>Synergy</span></a>
-    <a class="header-link" href="https://www.s-pace.nl/contact">Contact</a>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a class="header-link" href="https://www.s-pace.nl/contact" id="contactLink">Contact</a>
+      <div class="taal-switch">
+        <button class="taal-btn actief" id="btnNL" onclick="setTaal('nl')" title="Nederlands">NL</button>
+        <button class="taal-btn" id="btnEN" onclick="setTaal('en')" title="English">EN</button>
+      </div>
+    </div>
   </div>
 </header>
 
 <section class="hero">
   <div class="hero-inner">
-    <span class="hero-tag">GEV-methode</span>
     <h1>Feedback geven<br>zonder dat het<br><em>kritiek</em> wordt</h1>
-    <p>Beantwoord vijf vragen en ontvang direct concreet advies én een voorbeeldtekst — afgestemd op jouw situatie en gebaseerd op de methode van Pace Synergy.</p>
+    <p>Beantwoord vijf vragen en ontvang direct concreet advies én een voorbeeldtekst, afgestemd op jouw situatie en gebaseerd op de methode van Pace Synergy.</p>
   </div>
 </section>
 
@@ -491,7 +523,7 @@
       <span class="sectie-num">5</span>
       Beschrijf de situatie in je eigen woorden
     </div>
-    <div class="gev-badge">GEV-analyse volgt automatisch</div>
+    
     <textarea
       id="situatie"
       placeholder="Wat is er concreet aan de hand? Wat heeft de ander gedaan of nagelaten, en wat is het effect op jou, het team of de samenwerking?"
@@ -517,7 +549,7 @@
   <div class="resultaat" id="resultaat">
     <div class="resultaat-header">
       <div class="resultaat-title">Jouw advies</div>
-      <div class="resultaat-sub">op basis van de GEV-methode · Pace Synergy</div>
+      <div class="resultaat-sub">Pace Synergy</div>
     </div>
     <div class="resultaat-body" id="resultaatBody"></div>
     <button class="reset-btn" id="resetBtn">↩ Nieuwe situatie</button>
@@ -585,7 +617,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loader.classList.add('zichtbaar');
     resultaat.classList.remove('zichtbaar');
 
-    var prompt = 'Ik wil feedback geven. Analyseer mijn situatie en geef advies op basis van de GEV-methode.\n\nSituatiegegevens:\n- Relatie: ' + (sel.relatie || 'niet ingevuld') + '\n- Soort feedback: ' + (sel.type || 'niet ingevuld') + '\n- Urgentie/gevoeligheid: ' + (sel.urgentie || 'niet ingevuld') + '\n- Eerder besproken: ' + (sel.eerder || 'niet ingevuld') + '\n- Situatie: ' + situatie;
+    var prompt = 'Ik wil feedback geven. Analyseer mijn situatie en geef mij advies.\n\nSituatiegegevens:\n- Relatie: ' + (sel.relatie || 'niet ingevuld') + '\n- Soort feedback: ' + (sel.type || 'niet ingevuld') + '\n- Urgentie/gevoeligheid: ' + (sel.urgentie || 'niet ingevuld') + '\n- Eerder besproken: ' + (sel.eerder || 'niet ingevuld') + '\n- Situatie: ' + situatie;
 
     fetch('https://pace-feedback.vercel.app/api/advies', {
       method: 'POST',
@@ -681,6 +713,241 @@ document.addEventListener('DOMContentLoaded', function() {
     sel.relatie = null; sel.type = null; sel.urgentie = null; sel.eerder = null;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+});
+
+// ── Taalswitch ────────────────────────────────────────────────────────────
+var huidigeTaal = 'nl';
+
+var teksten = {
+  nl: {
+    heroTag: 'Pace Synergy',
+    heroTitle: 'Feedback geven<br>zonder dat het<br><em>kritiek</em> wordt',
+    heroSub: 'Beantwoord vijf vragen en ontvang direct concreet advies én een voorbeeldtekst, afgestemd op jouw situatie en gebaseerd op de methode van Pace Synergy.',
+    contact: 'Contact',
+    v1label: '1. Wat is je relatie met de ontvanger?',
+    v1chips: ['Collega','Medewerker','Leidinggevende','Vriend of familie','Student / leerling'],
+    v2label: '2. Wat voor soort feedback wil je geven?',
+    v2chips: ['Opbouwend','Compliment','Correctie / bijsturing','Houding / gedrag'],
+    v3label: '3. Hoe gevoelig of urgent is de situatie?',
+    v3chips: ['Licht / niet urgent','Matig urgent','Hoog / gevoelig'],
+    v4label: '4. Is dit onderwerp al eerder ter sprake gekomen?',
+    v4chips: ['Nee, eerste keer','Ja, maar weinig veranderd','Ja, het speelt opnieuw'],
+    v5label: '5. Beschrijf de situatie in je eigen woorden',
+    v5placeholder: 'Wat is er concreet aan de hand? Wat heeft de ander gedaan of nagelaten, en wat is het effect op jou, het team of de samenwerking?',
+    submitBtn: 'Genereer feedback',
+    loader: 'Advies wordt opgesteld…',
+    resultTitle: 'Jouw advies',
+    resultSub: 'Pace Synergy',
+    resetBtn: '↩ Nieuwe situatie',
+    ctaText: 'Wil je meer begeleiding?',
+    ctaLink: 'Ontdek de mogelijkheden bij Pace Synergy →',
+    disclaimer: 'Aan het gegenereerde advies kunnen geen rechten worden ontleend.',
+    copyright: '© Pace Synergy — De GEV-methode is eigendom van Pace Synergy.',
+    promptIntro: 'Ik wil feedback geven. Analyseer mijn situatie en geef mij advies.',
+    promptRelatie: 'Relatie',
+    promptType: 'Soort feedback',
+    promptUrgentie: 'Urgentie/gevoeligheid',
+    promptEerder: 'Eerder besproken',
+    promptSituatie: 'Situatie',
+    foutPrefix: 'Er ging iets mis: ',
+    geenInput: 'Vul eerst de situatie in.',
+    system: null,
+  },
+  en: {
+    heroTag: 'Pace Synergy',
+    heroTitle: 'Feedback that doesn\'t<br>turn into<br><em>criticism</em>',
+    heroSub: 'Answer five questions and receive direct, concrete advice and an example text — tailored to your situation and based on the Pace Synergy method.',
+    contact: 'Contact',
+    v1label: '1. What is your relationship with the recipient?',
+    v1chips: ['Colleague','Employee','Manager','Friend or family','Student / pupil'],
+    v2label: '2. What type of feedback do you want to give?',
+    v2chips: ['Constructive','Compliment','Correction','Attitude / behaviour'],
+    v3label: '3. How sensitive or urgent is the situation?',
+    v3chips: ['Low / not urgent','Moderately urgent','High / sensitive'],
+    v4label: '4. Has this topic been raised before?',
+    v4chips: ['No, first time','Yes, but little has changed','Yes, it has come up again'],
+    v5label: '5. Describe the situation in your own words',
+    v5placeholder: 'What is concretely happening? What has the other person done or failed to do, and what is the effect on you, the team or the collaboration?',
+    submitBtn: 'Generate feedback',
+    loader: 'Generating advice…',
+    resultTitle: 'Your advice',
+    resultSub: 'Pace Synergy',
+    resetBtn: '↩ New situation',
+    ctaText: 'Would you like more guidance?',
+    ctaLink: 'Discover the possibilities at Pace Synergy →',
+    disclaimer: 'No rights can be derived from the generated advice.',
+    copyright: '© Pace Synergy — The feedback method is the intellectual property of Pace Synergy.',
+    promptIntro: 'I want to give feedback. Analyse my situation and give me advice.',
+    promptRelatie: 'Relationship',
+    promptType: 'Type of feedback',
+    promptUrgentie: 'Urgency/sensitivity',
+    promptEerder: 'Previously discussed',
+    promptSituatie: 'Situation',
+    foutPrefix: 'Something went wrong: ',
+    geenInput: 'Please describe your situation first.',
+    system: 'You are an expert in effective communication and feedback, working from the methodology of Pace Synergy. You analyse situations in depth and give advice.\n\nImportant: always follow exactly the same structure, regardless of the situation. Every step is mandatory and must always be present in the output. Never deviate from this order and structure. Always use the exact headings as described below.\n\nYou always follow these three steps:\n\n**Step 1 - What is really going on?**\nAnalyse the situation in depth. What is the actual problem behind what is described? What dynamics, patterns or underlying needs may be at play? What expectations, assumptions, perceptions, triggers and projections play a role - both in the situation itself and in the person asking? What personal emotions, blind spots or interpretations might colour the feedback giver\'s view? Be sharp and direct, but always frame this from the situation, never as a judgement of the person.\n\n**Step 2 - Preparing for the conversation**\nWhen, where and how to start? What is the right tone and attitude? What are the biggest pitfalls in this specific situation? Keep this concise and practical.\n\nAlways add that it is strongly preferable to give feedback face-to-face. Precisely because feedback conversations are often sensitive, it is important that tone and body language can be observed and interpreted correctly. An in-person conversation prevents misunderstandings that are more likely to arise in written or telephone communication.\n\nIf the situation is emotionally charged - the person sounds frustrated, aggrieved or personally affected, or the situation involves serious themes such as betrayal, power struggles or deep conflict - also note that it is important to start with oneself first: acknowledge your own emotion and need, breathe calmly in and out as a foundation, and let it be without judging. Refer to the SEW method (Sensation - Emotion - Want) as a practical tool to gain control of your own emotions before the conversation takes place.\n\n**Step 3 - Example text**\nAlways provide a concrete example text, as a mediator would, built around:\n- Behaviour: concrete, observable behaviour or concrete signals: no judgement, no blame, no assumptions, no projections, neutral and objective. If information is indirect, frame it in terms of what the person has heard or seen, without presenting it as their own direct observation.\n- Effect: the effect on you AND on the people involved or the team, without blame, without judgement, without assumptions. Make the effect personal and concrete. Use Therefore...\n- Desire: what you do want, positive and future-oriented, only related to the behaviour and effect mentioned. State concretely and specifically what you need. Share what positive effect it would have if the need were fulfilled on you, the result, the team, or the collaboration. Do not give advice or tips on what the other person should do.\n\nIf the situation is too emotionally charged - the person labels, judges, or genuinely cannot describe any concrete behaviour - do NOT provide an example text. State this clearly but warmly: you see what the person is feeling, that is understandable, but the conversation would not yet have the desired effect. Explain what is needed first via the SEW method under step 2.\n\nTone: write like an experienced coach and mediator who genuinely cares about both parties. Direct and clear, but always constructive and empathetic. Name what you see without judging, without blame, without the tone of a critical parent. Make the person feel you are on their side and want to help them forward. Avoid harsh or dismissive formulations. Put yourself in the recipient\'s shoes and write as a reasonable adult, so the message is easy to receive. Use a warm, constructive tone that creates space rather than pressure. No judgement of the person or behaviour. Be firm on the content and gentle on the relationship.',
+  }
+};
+
+// Chip data-val vertalingen
+var chipVals = {
+  nl: {
+    relatie: ['collega op gelijk niveau','medewerker (jij bent de leidinggevende)','leidinggevende (de ander is jouw baas)','vriend of familielid','student of leerling'],
+    type: ['opbouwende kritiek op gedrag of werkwijze','een welgemeend compliment of erkenning','corrigerende feedback over iets wat echt moet stoppen of veranderen','feedback over houding of gedrag in de groep'],
+    urgentie: ['licht — het is bespreekbaar en niet urgent','matig — het speelt al een tijdje en vraagt aandacht','hoog — het is gevoelig, spannend of heeft serieuze gevolgen'],
+    eerder: ['nee, dit is de eerste keer dat ik dit aankaart','ja, eerder besproken maar er is weinig veranderd','ja, leek opgelost maar speelt opnieuw'],
+  },
+  en: {
+    relatie: ['colleague on equal level','employee (you are the manager)','manager (the other person is your boss)','friend or family member','student or pupil'],
+    type: ['constructive criticism of behaviour or working method','a sincere compliment or recognition','corrective feedback about something that really needs to stop or change','feedback about attitude or behaviour in the group'],
+    urgentie: ['low — it is discussable and not urgent','moderate — it has been going on for a while and needs attention','high — it is sensitive, significant or has serious consequences'],
+    eerder: ['no, this is the first time I am raising this','yes, discussed before but little has changed','yes, seemed resolved but has come up again'],
+  }
+};
+
+function setTaal(taal) {
+  huidigeTaal = taal;
+  var t = teksten[taal];
+
+  // Vlagknoppen
+  document.getElementById('btnNL').classList.toggle('actief', taal === 'nl');
+  document.getElementById('btnEN').classList.toggle('actief', taal === 'en');
+
+  // Contact link
+  document.getElementById('contactLink').textContent = t.contact;
+
+  // Hero
+  document.querySelector('.hero-tag').textContent = t.heroTag;
+  document.querySelector('.hero h1').innerHTML = t.heroTitle;
+  document.querySelector('.hero p').innerHTML = t.heroSub;
+
+  // Vraag labels
+  var secties = document.querySelectorAll('.sectie-label');
+  var labels = [t.v1label, t.v2label, t.v3label, t.v4label, t.v5label];
+  secties.forEach(function(s, i) {
+    var num = s.querySelector('.sectie-num');
+    s.innerHTML = '';
+    if (num) s.appendChild(num);
+    s.appendChild(document.createTextNode(' ' + labels[i]));
+    if (num) s.insertBefore(num, s.firstChild);
+  });
+
+  // Chips tekst + data-val
+  var groepen = ['relatie','type','urgentie','eerder'];
+  groepen.forEach(function(groepId) {
+    var chips = document.querySelectorAll('#' + groepId + ' .chip');
+    var labels2 = t['v' + ({relatie:1,type:2,urgentie:3,eerder:4}[groepId]) + 'chips'];
+    var vals = chipVals[taal][groepId];
+    chips.forEach(function(chip, i) {
+      if (labels2[i]) chip.textContent = labels2[i];
+      if (vals[i]) chip.dataset.val = vals[i];
+    });
+  });
+
+  // Reset selecties bij taalwissel
+  document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+  sel.relatie = null; sel.type = null; sel.urgentie = null; sel.eerder = null;
+
+  // Textarea
+  document.getElementById('situatie').placeholder = t.v5placeholder;
+
+  // Submit knop
+  document.getElementById('submitBtn').textContent = t.submitBtn;
+
+  // Loader tekst
+  document.querySelector('.loader').lastChild.textContent = ' ' + t.loader;
+
+  // Resultaat header
+  document.querySelector('.resultaat-title').textContent = t.resultTitle;
+  document.querySelector('.resultaat-sub').textContent = t.resultSub;
+
+  // Reset knop
+  document.getElementById('resetBtn').textContent = t.resetBtn;
+
+  // CTA
+  var ctaP = document.querySelector('.main > p[style]');
+  if (ctaP) {
+    var ctaA = ctaP.querySelector('a');
+    ctaP.childNodes[0].textContent = t.ctaText;
+    if (ctaA) ctaA.textContent = t.ctaLink;
+  }
+
+  // Disclaimer + copyright
+  var discP = document.querySelectorAll('.main > p');
+  discP.forEach(function(p) {
+    if (p.textContent.includes('rechten') || p.textContent.includes('rights')) {
+      p.innerHTML = t.disclaimer + '<br>' + t.copyright;
+    }
+  });
+
+  // html lang attribuut
+  document.documentElement.lang = taal;
+}
+
+// Overschrijf getAdvies om taal mee te nemen
+var _origGetAdvies = getAdvies;
+function getAdvies() {
+  _origGetAdvies();
+}
+
+// Patch de prompt en system voor taal — override na DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Herdefinieer de fetch call met taalondersteuning
+  var origSubmit = document.getElementById('submitBtn');
+  origSubmit.removeEventListener('click', getAdvies);
+  origSubmit.addEventListener('click', function() {
+    var t = teksten[huidigeTaal];
+    var situatie = document.getElementById('situatie').value.trim();
+    var fout = document.getElementById('fout');
+    fout.classList.remove('zichtbaar');
+    if (!situatie) { document.getElementById('situatie').focus(); return; }
+
+    var btn = document.getElementById('submitBtn');
+    var loader = document.getElementById('loader');
+    var resultaat = document.getElementById('resultaat');
+
+    btn.disabled = true;
+    btn.textContent = huidigeTaal === 'nl' ? 'Even geduld…' : 'Please wait…';
+    loader.classList.add('zichtbaar');
+    resultaat.classList.remove('zichtbaar');
+
+    var prompt = t.promptIntro + '\n\n' +
+      t.promptRelatie + ': ' + (sel.relatie || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n' +
+      t.promptType + ': ' + (sel.type || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n' +
+      t.promptUrgentie + ': ' + (sel.urgentie || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n' +
+      t.promptEerder + ': ' + (sel.eerder || (huidigeTaal === 'nl' ? 'niet ingevuld' : 'not filled in')) + '\n' +
+      t.promptSituatie + ': ' + situatie;
+
+    var systemPrompt = t.system || SYSTEM;
+
+    fetch('https://pace-feedback.vercel.app/api/advies', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: systemPrompt, prompt: prompt })
+    })
+    .then(function(res) {
+      if (!res.ok) {
+        return res.json().catch(function() { return {}; }).then(function(data) {
+          throw new Error(data.error || 'HTTP ' + res.status);
+        });
+      }
+      return res.json();
+    })
+    .then(function(data) {
+      renderAdvies(data.tekst);
+      resultaat.classList.add('zichtbaar');
+      resultaat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    })
+    .catch(function(e) {
+      fout.textContent = t.foutPrefix + e.message;
+      fout.classList.add('zichtbaar');
+    })
+    .finally(function() {
+      btn.disabled = false;
+      btn.textContent = t.submitBtn;
+      loader.classList.remove('zichtbaar');
+    });
+  });
 });
 </script>
 </body>
