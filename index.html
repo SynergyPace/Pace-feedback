@@ -446,8 +446,8 @@
     <div style="display:flex;align-items:center;gap:12px;">
       <a class="header-link" href="https://www.s-pace.nl/contact" id="contactLink">Contact</a>
       <div class="taal-switch">
-        <button class="taal-btn actief" id="btnNL" onclick="setTaal('nl')" title="Nederlands">NL</button>
-        <button class="taal-btn" id="btnEN" onclick="setTaal('en')" title="English">EN</button>
+        <button class="taal-btn actief" id="btnNL" title="Nederlands">NL</button>
+        <button class="taal-btn" id="btnEN" title="English">EN</button>
       </div>
     </div>
   </div>
@@ -721,6 +721,112 @@ document.addEventListener('DOMContentLoaded', function() {
     sel.relatie = null; sel.type = null; sel.urgentie = null; sel.eerder = null;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  function setTaal(taal) {
+    huidigeTaal = taal;
+    var t = teksten[taal];
+
+    // Knoppen actief/inactief
+    var btnNL = document.getElementById('btnNL');
+    var btnEN = document.getElementById('btnEN');
+    if (btnNL) btnNL.classList.toggle('actief', taal === 'nl');
+    if (btnEN) btnEN.classList.toggle('actief', taal === 'en');
+
+    // Contact link
+    var contactLink = document.getElementById('contactLink');
+    if (contactLink) contactLink.textContent = t.contact;
+
+    // Hero titel en subtitel
+    var heroH1 = document.querySelector('.hero h1');
+    var heroP = document.querySelector('.hero p');
+    if (heroH1) heroH1.innerHTML = t.heroTitle;
+    if (heroP) heroP.innerHTML = t.heroSub;
+
+    // Vraag labels
+    var secties = document.querySelectorAll('.sectie-label');
+    var labelArr = [t.v1label, t.v2label, t.v3label, t.v4label, t.v5label];
+    secties.forEach(function(s, i) {
+      var num = s.querySelector('.sectie-num');
+      s.innerHTML = '';
+      if (num) { s.appendChild(num); }
+      s.appendChild(document.createTextNode(' ' + labelArr[i]));
+      if (num) { s.insertBefore(num, s.firstChild); }
+    });
+
+    // Chips tekst + data-val
+    var groepMap = {relatie: 0, type: 1, urgentie: 2, eerder: 3};
+    var chipKeys = ['v1chips','v2chips','v3chips','v4chips'];
+    Object.keys(groepMap).forEach(function(groepId) {
+      var chips = document.querySelectorAll('#' + groepId + ' .chip');
+      var idx = groepMap[groepId];
+      var nieuwLabels = t[chipKeys[idx]];
+      var nieuwVals = chipVals[taal][groepId];
+      chips.forEach(function(chip, i) {
+        if (nieuwLabels && nieuwLabels[i] !== undefined) chip.textContent = nieuwLabels[i];
+        if (nieuwVals && nieuwVals[i] !== undefined) chip.dataset.val = nieuwVals[i];
+      });
+    });
+
+    // Reset selecties
+    document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+    sel.relatie = null; sel.type = null; sel.urgentie = null; sel.eerder = null;
+
+    // Textarea placeholder
+    var textarea = document.getElementById('situatie');
+    if (textarea) textarea.placeholder = t.v5placeholder;
+
+    // Submit knop
+    var btn = document.getElementById('submitBtn');
+    if (btn && !btn.disabled) btn.textContent = t.submitBtn;
+
+    // Loader tekst (laatste tekstnode)
+    var loader = document.querySelector('.loader');
+    if (loader) {
+      var loaderNodes = loader.childNodes;
+      for (var i = loaderNodes.length - 1; i >= 0; i--) {
+        if (loaderNodes[i].nodeType === 3) {
+          loaderNodes[i].textContent = ' ' + t.loader;
+          break;
+        }
+      }
+    }
+
+    // Resultaat header
+    var resTitle = document.querySelector('.resultaat-title');
+    var resSub = document.querySelector('.resultaat-sub');
+    if (resTitle) resTitle.textContent = t.resultTitle;
+    if (resSub) resSub.textContent = t.resultSub;
+
+    // Reset knop
+    var resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) resetBtn.textContent = t.resetBtn;
+
+    // CTA tekst + link
+    var ctaP = document.querySelector('.main > p[style]');
+    if (ctaP) {
+      var ctaA = ctaP.querySelector('a');
+      var firstText = ctaP.firstChild;
+      if (firstText && firstText.nodeType === 3) firstText.textContent = t.ctaText;
+      if (ctaA) ctaA.textContent = t.ctaLink;
+    }
+
+    // Disclaimer + copyright
+    var allP = document.querySelectorAll('.main > p');
+    allP.forEach(function(p) {
+      if (p.textContent.indexOf('rechten') > -1 || p.textContent.indexOf('rights') > -1 ||
+          p.textContent.indexOf('eigendom') > -1 || p.textContent.indexOf('property') > -1) {
+        p.innerHTML = t.disclaimer + '<br>' + t.copyright;
+      }
+    });
+
+    // lang attribuut
+    document.documentElement.lang = taal;
+  }
+
+  // Koppel taalknop event listeners
+  document.getElementById('btnNL').addEventListener('click', function() { setTaal('nl'); });
+  document.getElementById('btnEN').addEventListener('click', function() { setTaal('en'); });
+
 });
 
 // ── Taalswitch ────────────────────────────────────────────────────────────
@@ -812,85 +918,6 @@ var chipVals = {
     eerder: ['no, this is the first time I am raising this','yes, discussed before but little has changed','yes, seemed resolved but has come up again'],
   }
 };
-
-function setTaal(taal) {
-  huidigeTaal = taal;
-  var t = teksten[taal];
-
-  // Vlagknoppen
-  document.getElementById('btnNL').classList.toggle('actief', taal === 'nl');
-  document.getElementById('btnEN').classList.toggle('actief', taal === 'en');
-
-  // Contact link
-  document.getElementById('contactLink').textContent = t.contact;
-
-  // Hero
-  document.querySelector('.hero-tag').textContent = t.heroTag;
-  document.querySelector('.hero h1').innerHTML = t.heroTitle;
-  document.querySelector('.hero p').innerHTML = t.heroSub;
-
-  // Vraag labels
-  var secties = document.querySelectorAll('.sectie-label');
-  var labels = [t.v1label, t.v2label, t.v3label, t.v4label, t.v5label];
-  secties.forEach(function(s, i) {
-    var num = s.querySelector('.sectie-num');
-    s.innerHTML = '';
-    if (num) s.appendChild(num);
-    s.appendChild(document.createTextNode(' ' + labels[i]));
-    if (num) s.insertBefore(num, s.firstChild);
-  });
-
-  // Chips tekst + data-val
-  var groepen = ['relatie','type','urgentie','eerder'];
-  groepen.forEach(function(groepId) {
-    var chips = document.querySelectorAll('#' + groepId + ' .chip');
-    var labels2 = t['v' + ({relatie:1,type:2,urgentie:3,eerder:4}[groepId]) + 'chips'];
-    var vals = chipVals[taal][groepId];
-    chips.forEach(function(chip, i) {
-      if (labels2[i]) chip.textContent = labels2[i];
-      if (vals[i]) chip.dataset.val = vals[i];
-    });
-  });
-
-  // Reset selecties bij taalwissel
-  document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
-  sel.relatie = null; sel.type = null; sel.urgentie = null; sel.eerder = null;
-
-  // Textarea
-  document.getElementById('situatie').placeholder = t.v5placeholder;
-
-  // Submit knop
-  document.getElementById('submitBtn').textContent = t.submitBtn;
-
-  // Loader tekst
-  document.querySelector('.loader').lastChild.textContent = ' ' + t.loader;
-
-  // Resultaat header
-  document.querySelector('.resultaat-title').textContent = t.resultTitle;
-  document.querySelector('.resultaat-sub').textContent = t.resultSub;
-
-  // Reset knop
-  document.getElementById('resetBtn').textContent = t.resetBtn;
-
-  // CTA
-  var ctaP = document.querySelector('.main > p[style]');
-  if (ctaP) {
-    var ctaA = ctaP.querySelector('a');
-    ctaP.childNodes[0].textContent = t.ctaText;
-    if (ctaA) ctaA.textContent = t.ctaLink;
-  }
-
-  // Disclaimer + copyright
-  var discP = document.querySelectorAll('.main > p');
-  discP.forEach(function(p) {
-    if (p.textContent.includes('rechten') || p.textContent.includes('rights')) {
-      p.innerHTML = t.disclaimer + '<br>' + t.copyright;
-    }
-  });
-
-  // html lang attribuut
-  document.documentElement.lang = taal;
-}
 
 // Overschrijf getAdvies om taal mee te nemen
 </script>
