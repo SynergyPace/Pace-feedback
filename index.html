@@ -433,6 +433,100 @@
   }
   .taal-btn:hover { color: rgba(255,255,255,0.7); }
 
+  /* ── Modal ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.zichtbaar { display: flex; }
+  .modal-box {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 32px;
+    position: relative;
+  }
+  .modal-titel {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-right: 32px;
+  }
+  .modal-tekst {
+    font-size: 13px;
+    color: var(--text-sec);
+    line-height: 1.8;
+  }
+  .modal-tekst p { margin-bottom: 14px; }
+  .modal-tekst p:last-child { margin-bottom: 0; }
+  .modal-sluit {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--muted);
+    line-height: 1;
+    padding: 4px;
+  }
+  .modal-sluit:hover { color: var(--text); }
+  .modal-footer {
+    margin-top: 24px;
+    text-align: right;
+  }
+  .modal-btn {
+    padding: 10px 24px;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+  }
+  .modal-btn:hover { opacity: 0.85; }
+
+  /* ── Checkboxes ── */
+  .akkoord-sectie {
+    margin: 16px 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .akkoord-label {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13px;
+    color: var(--text-sec);
+    line-height: 1.6;
+    cursor: pointer;
+  }
+  .akkoord-label input[type="checkbox"] {
+    margin-top: 3px;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--black);
+    cursor: pointer;
+  }
+  .akkoord-label a {
+    color: var(--warm);
+    text-decoration: underline;
+  }
+
   @media (max-width: 480px) {
     .chip { font-size: 12px; padding: 6px 13px; }
   }
@@ -456,7 +550,7 @@
 <section class="hero">
   <div class="hero-inner">
     <h1>Feedback geven<br>zonder dat het<br><em>kritiek</em> wordt</h1>
-    <p>Beantwoord vijf vragen en ontvang direct concreet advies én een voorbeeldtekst, afgestemd op jouw situatie en gebaseerd op de methode van Pace Synergy.</p>
+    <p>Beantwoord vijf vragen en krijg direct richting voor je gesprek, met een voorbeeldtekst als startpunt om je eigen boodschap helder te formuleren.</p>
   </div>
 </section>
 
@@ -532,8 +626,19 @@
 
   <div class="fout" id="fout"></div>
 
-  <button class="submit-btn" id="submitBtn">
-    Genereer feedback
+  <div class="akkoord-sectie" id="akkoordSectie">
+    <label class="akkoord-label">
+      <input type="checkbox" id="check1" onchange="checkAkkoord()">
+      <span id="check1tekst">Ik ga akkoord met de <a href="https://www.s-pace.nl/_files/ugd/39909a_03effa5b920b4e76a7bc81138fc4296c.pdf" target="_blank" id="avLink">algemene voorwaarden</a> van Pace Synergy.</span>
+    </label>
+    <label class="akkoord-label">
+      <input type="checkbox" id="check2" onchange="checkAkkoord()">
+      <span id="check2tekst">Ik heb de <a href="#" onclick="openModal(event)" id="modalLink">gebruiksvoorwaarden</a> gelezen en begrepen, en ik begrijp dat het feedbackvoorstel automatisch wordt gegenereerd op basis van mijn invoer. Het is bedoeld als startpunt — ik blijf zelf verantwoordelijk voor de interpretatie en toepassing.</span>
+    </label>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" disabled>
+    Feedbackvoorstel
   </button>
 
   <div class="loader" id="loader">
@@ -542,13 +647,13 @@
       <div class="dot"></div>
       <div class="dot"></div>
     </div>
-    Advies wordt opgesteld…
+    Feedbackvoorstel wordt gegenereerd…
   </div>
 
   <!-- Resultaat -->
   <div class="resultaat" id="resultaat">
     <div class="resultaat-header">
-      <div class="resultaat-title">Jouw advies</div>
+      <div class="resultaat-title">Hier is je feedbackvoorstel.</div>
       <div class="resultaat-sub">Pace Synergy</div>
     </div>
     <div class="resultaat-body" id="resultaatBody"></div>
@@ -563,9 +668,26 @@
   </p>
 
   <p style="font-size:11px; color:var(--muted); line-height:1.8; text-align:center; margin-top:16px;">
-    Aan het gegenereerde advies kunnen geen rechten worden ontleend.<br>
-    © Pace Synergy — Deze methode is eigendom van Pace Synergy.
+    © Pace Synergy — Alle rechten voorbehouden.
   </p>
+
+<!-- Modal gebruiksvoorwaarden -->
+<div class="modal-overlay" id="modalOverlay" onclick="sluitModal(event)">
+  <div class="modal-box">
+    <button class="modal-sluit" onclick="sluitModal()" id="modalSluitBtn">&times;</button>
+    <div class="modal-titel" id="modalTitel">Gebruiksvoorwaarden feedbacktool</div>
+    <div class="modal-tekst" id="modalTekst">
+      <p><strong>Let op:</strong> Het (deels) automatisch gegenereerde feedbackvoorstel is algemeen van aard en gebaseerd op de door de gebruiker ingevoerde informatie. Het vervangt geen professioneel advies of begeleiding.</p>
+      <p>Aan het feedbackvoorstel kunnen geen rechten worden ontleend. Gebruik van deze tool en toepassing van het voorstel is volledig op eigen verantwoordelijkheid.</p>
+      <p>Pace Synergy is niet aansprakelijk voor enige directe of indirecte schade voortvloeiend uit het gebruik van deze tool of het gegenereerde feedbackvoorstel.</p>
+      <p>De kwaliteit van het feedbackvoorstel is afhankelijk van de juistheid en volledigheid van de ingevoerde informatie.</p>
+      <p>© Pace Synergy — Alle rechten voorbehouden. Deze methode en inhoud mogen niet zonder voorafgaande schriftelijke toestemming worden gekopieerd, verspreid of commercieel gebruikt.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn" onclick="sluitModal()" id="modalSluiten">Sluiten</button>
+    </div>
+  </div>
+</div>
 
 </main>
 
@@ -595,7 +717,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  var SYSTEM = 'Je bent een expert in effectieve communicatie en feedback, werkend vanuit de methodiek van Pace Synergy. Je analyseert situaties diepgaand en geeft advies op basis van de GEV-methode (Gedrag - Effect - Verlangen).\n\nBelangrijk: volg altijd exact dezelfde structuur, ongeacht de situatie. Elke stap is verplicht en moet altijd aanwezig zijn in de output. Wijk nooit af van deze volgorde en structuur. Gebruik altijd de exacte kopjes zoals hieronder beschreven.\n\nJe volgt altijd deze drie stappen:\n\n**Stap 1 - Wat speelt er werkelijk?**\nAnalyseer de situatie diepgaand. Wat is het eigenlijke probleem achter wat beschreven wordt? Welke dynamiek, patroon of onderliggende behoefte speelt er mogelijk mee? Welke verwachtingen, aannames, percepties, triggers en projecties spelen een rol - zowel in de situatie zelf als bij de aanvrager? Welke eigen emoties, blinde vlekken of invullingen kunnen de kijk van de feedbackgever kleuren? Wees scherp en direct, maar benoem dit altijd vanuit de situatie, nooit als oordeel over de persoon.\n\n**Stap 2 - Voorbereiding op het gesprek**\nWanneer, waar en hoe te beginnen? Wat is de juiste toon en houding? Wat zijn de grootste valkuilen in deze specifieke situatie? Houd dit beknopt en praktisch.\n\nVoeg altijd toe dat het sterk de voorkeur heeft om feedback face-to-face te geven. Juist omdat feedbackgesprekken vaak gevoelig liggen, is het belangrijk dat toon en houding goed kunnen worden waargenomen en geinterpreteerd. Een gesprek in persoon voorkomt misverstanden die bij geschreven of telefonische communicatie sneller ontstaan.\n\nAls de situatie emotioneel geladen is - de aanvrager klinkt gefrustreerd, verongelijkt of persoonlijk geraakt, of de situatie betreft zware themas zoals bedrog, verraad, machtsstrijd of diep conflict - benoem dan ook dat het belangrijk is om eerst bij zichzelf te beginnen: erken je eigen emotie en behoefte, adem rustig in en uit als basis, en laat het er zijn zonder te oordelen. Verwijs hiervoor naar de SEW-methode (Sensatie - Emotie - Willen) als praktisch hulpmiddel om grip te krijgen op de eigen emotie voordat het gesprek wordt aangegaan.\n\n**Stap 3 - Voorbeeldtekst via de GEV-methode**\nGeef ALTIJD een concrete voorbeeldtekst, ook als de informatie indirect is of de situatie complex. De enige uitzondering is als de aanvrager aantoonbaar labelt, veroordeelt of volledig geen concreet gedrag kan benoemen. Als de informatie indirect is (via anderen gehoord), formuleer de G dan neutraal vanuit wat de aanvrager zelf heeft waargenomen of gehoord, zonder dit te presenteren als eigen directe observatie.\n\nSchrijf een concrete openingstekst, zoals een mediator zou doen, opgebouwd uit:\n- G (Gedrag): concreet observeerbaar gedrag of concrete signalen: geen oordeel, geen verwijt, geen aannames of invulling, geen projectie, wel neutraal en objectief geformuleerd. Als informatie indirect is, formuleer dan vanuit wat de aanvrager heeft gehoord of gezien, zonder het als eigen directe waarneming te presenteren.\n- E (Effect): het effect op jou EN op de betrokken medewerkers of het team, zonder verwijt, zonder oordeel, zonder aannames, zonder invulling, zonder projectie, zonder frustratie of andere emotie. Maak het effect persoonlijk en concreet: wat is het effect op de feedbackgever zelf, maar ook wat is het effect op de mensen over wie de feedback gaat? Gebruik Daardoor...\n- V (Verlangen): wat je wel wilt, positief en toekomstgericht, alleen verband houdend met het benoemde gedrag en effect. Benoem concreet en specifiek waar je wel behoefte aan hebt. Dat mag soms verwijzen naar gewenst gedrag of positief effect in de vorm van een algemeen principe. Afhankelijk van de feedback: deel wat voor positief effect het zou hebben als de behoefte zou worden vervuld op jou, het resultaat, het team, of de samenwerking. Geef geen advies of tip wat de ander moet doen, houd het bij de aanvrager.\n\nAls de situatie emotioneel te geladen is - de aanvrager labelt, veroordeelt, of kan werkelijk geen enkel concreet gedrag of signaal benoemen - geef je GEEN voorbeeldtekst. Je benoemt dit helder maar warm: je ziet wat de aanvrager voelt, dat is begrijpelijk, maar het gesprek zou nu nog niet het gewenste effect hebben. Je legt uit wat er eerst nodig is via de SEW-methode onder stap 2.\n\nToon: schrijf zoals een ervaren coach en mediator die oprecht begaan is met beiden. Direct en helder, maar altijd opbouwend en empathisch. Je benoemt wat je ziet zonder te veroordelen, zonder verwijten, zonder toon van kritische ouder. Je geeft de aanvrager het gevoel dat je aan hun kant staat en hen verder wil helpen. Vermijd harde of afwijzende formuleringen of stellingen. Verplaats je in de ontvanger en schrijf als een redelijke volwassene, zodat de boodschap makkelijk is te ontvangen en begrip voor is op te brengen. Gebruik een warme, constructieve toon die ruimte geeft in plaats van druk zet. Geen oordeel over de persoon of gedrag. Wees hard op de inhoud en zacht op de relatie.';
+  var SYSTEM = 'Je bent een expert in effectieve communicatie en feedback, werkend vanuit de methodiek van Pace Synergy. Je analyseert situaties diepgaand en geeft advies op basis van de GEV-methode (Gedrag - Effect - Verlangen).\n\nBelangrijk: volg altijd exact dezelfde structuur, ongeacht de situatie. Elke stap is verplicht en moet altijd aanwezig zijn in de output. Wijk nooit af van deze volgorde en structuur. Gebruik altijd de exacte kopjes zoals hieronder beschreven.\n\nJe volgt altijd deze drie stappen:\n\n**Stap 1 - Wat speelt er werkelijk?**\nAnalyseer de situatie diepgaand. Wat is het eigenlijke probleem achter wat beschreven wordt? Welke dynamiek, patroon of onderliggende behoefte speelt er mogelijk mee? Welke verwachtingen, aannames, percepties, triggers en projecties spelen een rol - zowel in de situatie zelf als bij de aanvrager? Welke eigen emoties, blinde vlekken of invullingen kunnen de kijk van de feedbackgever kleuren? Wees scherp en direct, maar benoem dit altijd vanuit de situatie, nooit als oordeel over de persoon.\n\n**Stap 2 - Voorbereiding op het gesprek**\nWanneer, waar en hoe te beginnen? Wat is de juiste toon en houding? Wat zijn de grootste valkuilen in deze specifieke situatie? Houd dit beknopt en praktisch.\n\nVoeg altijd toe dat het sterk de voorkeur heeft om feedback face-to-face te geven. Juist omdat feedbackgesprekken vaak gevoelig liggen, is het belangrijk dat toon en houding goed kunnen worden waargenomen en geinterpreteerd. Een gesprek in persoon voorkomt misverstanden die bij geschreven of telefonische communicatie sneller ontstaan.\n\nAls de situatie emotioneel geladen is - de aanvrager klinkt gefrustreerd, verongelijkt of persoonlijk geraakt, of de situatie betreft zware themas zoals bedrog, verraad, machtsstrijd of diep conflict - benoem dan ook dat het belangrijk is om eerst bij zichzelf te beginnen: erken je eigen emotie en behoefte, adem rustig in en uit als basis, en laat het er zijn zonder te oordelen. Verwijs hiervoor naar de SEW-methode (Sensatie - Emotie - Willen) als praktisch hulpmiddel om grip te krijgen op de eigen emotie voordat het gesprek wordt aangegaan.\n\n**Stap 3 - Voorbeeldtekst (als startpunt)**\nGeef ALTIJD een concrete voorbeeldtekst, ook als de informatie indirect is of de situatie complex. De enige uitzondering is als de aanvrager aantoonbaar labelt, veroordeelt of volledig geen concreet gedrag kan benoemen. Als de informatie indirect is (via anderen gehoord), formuleer de G dan neutraal vanuit wat de aanvrager zelf heeft waargenomen of gehoord, zonder dit te presenteren als eigen directe observatie.\n\nBegin met de standaardzin: "Je kunt het bijvoorbeeld zo formuleren:" en schrijf daarna een concrete openingstekst, zoals een mediator zou doen, opgebouwd uit:\n- G (Gedrag): concreet observeerbaar gedrag of concrete signalen: geen oordeel, geen verwijt, geen aannames of invulling, geen projectie, wel neutraal en objectief geformuleerd. Als informatie indirect is, formuleer dan vanuit wat de aanvrager heeft gehoord of gezien, zonder het als eigen directe waarneming te presenteren.\n- E (Effect): het effect op jou EN op de betrokken medewerkers of het team, zonder verwijt, zonder oordeel, zonder aannames, zonder invulling, zonder projectie, zonder frustratie of andere emotie. Maak het effect persoonlijk en concreet: wat is het effect op de feedbackgever zelf, maar ook wat is het effect op de mensen over wie de feedback gaat? Gebruik Daardoor...\n- V (Verlangen): wat je wel wilt, positief en toekomstgericht, alleen verband houdend met het benoemde gedrag en effect. Benoem concreet en specifiek waar je wel behoefte aan hebt. Dat mag soms verwijzen naar gewenst gedrag of positief effect in de vorm van een algemeen principe. Afhankelijk van de feedback: deel wat voor positief effect het zou hebben als de behoefte zou worden vervuld op jou, het resultaat, het team, of de samenwerking. Geef geen advies of tip wat de ander moet doen, houd het bij de aanvrager.\n\nAls de situatie emotioneel te geladen is - de aanvrager labelt, veroordeelt, of kan werkelijk geen enkel concreet gedrag of signaal benoemen - geef je GEEN voorbeeldtekst. Je benoemt dit helder maar warm: je ziet wat de aanvrager voelt, dat is begrijpelijk, maar het gesprek zou nu nog niet het gewenste effect hebben. Je legt uit wat er eerst nodig is via de SEW-methode onder stap 2.\n\nToon: schrijf zoals een ervaren coach en mediator die oprecht begaan is met beiden. Direct en helder, maar altijd opbouwend en empathisch. Je benoemt wat je ziet zonder te veroordelen, zonder verwijten, zonder toon van kritische ouder. Je geeft de aanvrager het gevoel dat je aan hun kant staat en hen verder wil helpen. Vermijd harde of afwijzende formuleringen of stellingen. Verplaats je in de ontvanger en schrijf als een redelijke volwassene, zodat de boodschap makkelijk is te ontvangen en begrip voor is op te brengen. Gebruik een warme, constructieve toon die ruimte geeft in plaats van druk zet. Geen oordeel over de persoon of gedrag. Wees hard op de inhoud en zacht op de relatie.';
 
   function getAdvies() {
     var t = teksten[huidigeTaal];
@@ -713,12 +835,42 @@ document.addEventListener('DOMContentLoaded', function() {
     return tekst.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   }
 
+  function openModal(e) {
+    if (e) e.preventDefault();
+    document.getElementById('modalOverlay').classList.add('zichtbaar');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function sluitModal(e) {
+    if (e && e.target !== document.getElementById('modalOverlay') &&
+        e.type === 'click' && e.currentTarget === document.getElementById('modalOverlay')) {
+      if (e.target !== document.getElementById('modalOverlay')) return;
+    }
+    document.getElementById('modalOverlay').classList.remove('zichtbaar');
+    document.body.style.overflow = '';
+  }
+
+  function checkAkkoord() {
+    var c1 = document.getElementById('check1');
+    var c2 = document.getElementById('check2');
+    var btn = document.getElementById('submitBtn');
+    if (c1 && c2 && btn) {
+      btn.disabled = !(c1.checked && c2.checked);
+    }
+  }
+
   function resetForm() {
     document.getElementById('situatie').value = '';
     document.getElementById('resultaat').classList.remove('zichtbaar');
     document.getElementById('fout').classList.remove('zichtbaar');
     document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
     sel.relatie = null; sel.type = null; sel.urgentie = null; sel.eerder = null;
+    // Reset checkboxes
+    var c1 = document.getElementById('check1');
+    var c2 = document.getElementById('check2');
+    if (c1) c1.checked = false;
+    if (c2) c2.checked = false;
+    checkAkkoord();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -819,6 +971,33 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
+    // Modal vertaling
+    var modalTitel = document.getElementById('modalTitel');
+    var modalTekst = document.getElementById('modalTekst');
+    var modalSluiten = document.getElementById('modalSluiten');
+    var modalSluitBtn = document.getElementById('modalSluitBtn');
+    if (taal === 'en') {
+      if (modalTitel) modalTitel.textContent = 'Terms of use feedback tool';
+      if (modalSluiten) modalSluiten.textContent = 'Close';
+      if (modalTekst) modalTekst.innerHTML = '<p><strong>Please note:</strong> The (partially) automatically generated feedback proposal is general in nature and based on the information entered by the user. It does not replace professional advice or guidance.</p><p>No rights can be derived from the feedback proposal. Use of this tool and application of the proposal is entirely at your own risk.</p><p>Pace Synergy is not liable for any direct or indirect damage arising from the use of this tool or the generated feedback proposal.</p><p>The quality of the feedback proposal depends on the accuracy and completeness of the information provided.</p><p>© Pace Synergy — All rights reserved. This method and content may not be copied, distributed or used commercially without prior written permission.</p>';
+    } else {
+      if (modalTitel) modalTitel.textContent = 'Gebruiksvoorwaarden feedbacktool';
+      if (modalSluiten) modalSluiten.textContent = 'Sluiten';
+      if (modalTekst) modalTekst.innerHTML = '<p><strong>Let op:</strong> Het (deels) automatisch gegenereerde feedbackvoorstel is algemeen van aard en gebaseerd op de door de gebruiker ingevoerde informatie. Het vervangt geen professioneel advies of begeleiding.</p><p>Aan het feedbackvoorstel kunnen geen rechten worden ontleend. Gebruik van deze tool en toepassing van het voorstel is volledig op eigen verantwoordelijkheid.</p><p>Pace Synergy is niet aansprakelijk voor enige directe of indirecte schade voortvloeiend uit het gebruik van deze tool of het gegenereerde feedbackvoorstel.</p><p>De kwaliteit van het feedbackvoorstel is afhankelijk van de juistheid en volledigheid van de ingevoerde informatie.</p><p>© Pace Synergy — Alle rechten voorbehouden. Deze methode en inhoud mogen niet zonder voorafgaande schriftelijke toestemming worden gekopieerd, verspreid of commercieel gebruikt.</p>';
+    }
+
+    // Checkbox teksten
+    var check1tekst = document.getElementById('check1tekst');
+    var check2tekst = document.getElementById('check2tekst');
+    var avLink = document.getElementById('avLink');
+    if (taal === 'en') {
+      if (check1tekst) check1tekst.innerHTML = 'I agree with the <a href="https://www.s-pace.nl/_files/ugd/39909a_03effa5b920b4e76a7bc81138fc4296c.pdf" target="_blank" id="avLink">terms and conditions</a> of Pace Synergy.';
+      if (check2tekst) check2tekst.innerHTML = 'I have read and understood the <a href="#" onclick="openModal(event)" id="modalLink">terms of use</a>, and I understand that the feedback proposal is automatically generated based on my input. It is intended as a starting point — I remain responsible for the interpretation and application.';
+    } else {
+      if (check1tekst) check1tekst.innerHTML = 'Ik ga akkoord met de <a href="https://www.s-pace.nl/_files/ugd/39909a_03effa5b920b4e76a7bc81138fc4296c.pdf" target="_blank" id="avLink">algemene voorwaarden</a> van Pace Synergy.';
+      if (check2tekst) check2tekst.innerHTML = 'Ik heb de <a href="#" onclick="openModal(event)" id="modalLink">gebruiksvoorwaarden</a> gelezen en begrepen, en ik begrijp dat het feedbackvoorstel automatisch wordt gegenereerd op basis van mijn invoer. Het is bedoeld als startpunt — ik blijf zelf verantwoordelijk voor de interpretatie en toepassing.';
+    }
+
     // lang attribuut
     document.documentElement.lang = taal;
   }
@@ -836,7 +1015,7 @@ var teksten = {
   nl: {
     heroTag: 'Pace Synergy',
     heroTitle: 'Feedback geven<br>zonder dat het<br><em>kritiek</em> wordt',
-    heroSub: 'Beantwoord vijf vragen en ontvang direct concreet advies én een voorbeeldtekst, afgestemd op jouw situatie en gebaseerd op de methode van Pace Synergy.',
+    heroSub: 'Beantwoord vijf vragen en krijg direct richting voor je gesprek, met een voorbeeldtekst als startpunt om je eigen boodschap helder te formuleren.',
     contact: 'Contact',
     v1label: '1. Wat is je relatie met de ontvanger?',
     v1chips: ['Collega','Medewerker','Leidinggevende','Vriend of familie','Student / leerling'],
@@ -848,15 +1027,15 @@ var teksten = {
     v4chips: ['Nee, eerste keer','Ja, maar weinig veranderd','Ja, het speelt opnieuw'],
     v5label: '5. Beschrijf de situatie in je eigen woorden',
     v5placeholder: 'Wat is er concreet aan de hand? Wat heeft de ander gedaan of nagelaten, en wat is het effect op jou, het team of de samenwerking?',
-    submitBtn: 'Genereer feedback',
-    loader: 'Advies wordt opgesteld…',
-    resultTitle: 'Jouw advies',
+    submitBtn: 'Feedbackvoorstel',
+    loader: 'Feedbackvoorstel wordt gegenereerd…',
+    resultTitle: 'Hier is je feedbackvoorstel.',
     resultSub: 'Pace Synergy',
     resetBtn: '↩ Nieuwe situatie',
     ctaText: 'Wil je meer begeleiding?',
     ctaLink: 'Ontdek de mogelijkheden bij Pace Synergy →',
-    disclaimer: 'Aan het gegenereerde advies kunnen geen rechten worden ontleend.',
-    copyright: '© Pace Synergy — Deze methode is eigendom van Pace Synergy.',
+    disclaimer: 'Let op: Het (deels) automatisch gegenereerde advies is algemeen van aard en gebaseerd op de door de gebruiker ingevoerde informatie. Het vervangt geen professioneel advies of begeleiding. Aan het advies kunnen geen rechten worden ontleend. Gebruik van deze tool en toepassing van het advies is volledig op eigen verantwoordelijkheid. Pace Synergy is niet aansprakelijk voor enige directe of indirecte schade voortvloeiend uit het gebruik van deze tool of het gegenereerde advies. De kwaliteit van het advies is afhankelijk van de juistheid en volledigheid van de ingevoerde informatie.',
+    copyright: '© Pace Synergy — Alle rechten voorbehouden. Deze methode en inhoud mogen niet zonder voorafgaande schriftelijke toestemming worden gekopieerd, verspreid of commercieel gebruikt.',
     promptIntro: 'Ik wil feedback geven. Analyseer mijn situatie en geef mij advies.',
     promptRelatie: 'Relatie',
     promptType: 'Soort feedback',
@@ -870,7 +1049,7 @@ var teksten = {
   en: {
     heroTag: 'Pace Synergy',
     heroTitle: 'Feedback that doesn\'t<br>turn into<br><em>criticism</em>',
-    heroSub: 'Answer five questions and receive direct, concrete advice and an example text — tailored to your situation and based on the Pace Synergy method.',
+    heroSub: 'Answer five questions and get direct guidance for your conversation, with an example text as a starting point to clearly formulate your own message.',
     contact: 'Contact',
     v1label: '1. What is your relationship with the recipient?',
     v1chips: ['Colleague','Employee','Manager','Friend or family','Student / pupil'],
@@ -882,15 +1061,15 @@ var teksten = {
     v4chips: ['No, first time','Yes, but little has changed','Yes, it has come up again'],
     v5label: '5. Describe the situation in your own words',
     v5placeholder: 'What is concretely happening? What has the other person done or failed to do, and what is the effect on you, the team or the collaboration?',
-    submitBtn: 'Generate feedback',
-    loader: 'Generating advice…',
-    resultTitle: 'Your advice',
+    submitBtn: 'Feedback proposal',
+    loader: 'Generating feedback proposal…',
+    resultTitle: 'Here is your feedback proposal.',
     resultSub: 'Pace Synergy',
     resetBtn: '↩ New situation',
     ctaText: 'Would you like more guidance?',
     ctaLink: 'Discover the possibilities at Pace Synergy →',
-    disclaimer: 'No rights can be derived from the generated advice.',
-    copyright: '© Pace Synergy — This method is the intellectual property of Pace Synergy.',
+    disclaimer: 'Please note: The (partially) automatically generated advice is general in nature and based on the information entered by the user. It does not replace professional advice or guidance. No rights can be derived from this advice. Use of this tool and application of the advice is entirely at your own risk. Pace Synergy is not liable for any direct or indirect damage arising from the use of this tool or the generated advice. The quality of the advice depends on the accuracy and completeness of the information provided.',
+    copyright: '© Pace Synergy — All rights reserved. This method and content may not be copied, distributed or used commercially without prior written permission.',
     promptIntro: 'I want to give feedback. Analyse my situation and give me advice.',
     promptRelatie: 'Relationship',
     promptType: 'Type of feedback',
@@ -899,7 +1078,7 @@ var teksten = {
     promptSituatie: 'Situation',
     foutPrefix: 'Something went wrong: ',
     geenInput: 'Please describe your situation first.',
-    system: 'You are an expert in effective communication and feedback, working from the methodology of Pace Synergy. You analyse situations in depth and give advice.\n\nImportant: always follow exactly the same structure, regardless of the situation. Every step is mandatory and must always be present in the output. Never deviate from this order and structure. Always use the exact headings as described below.\n\nYou always follow these three steps:\n\n**Step 1 - What is really going on?**\nAnalyse the situation in depth. What is the actual problem behind what is described? What dynamics, patterns or underlying needs may be at play? What expectations, assumptions, perceptions, triggers and projections play a role - both in the situation itself and in the person asking? What personal emotions, blind spots or interpretations might colour the feedback giver\'s view? Be sharp and direct, but always frame this from the situation, never as a judgement of the person.\n\n**Step 2 - Preparing for the conversation**\nWhen, where and how to start? What is the right tone and attitude? What are the biggest pitfalls in this specific situation? Keep this concise and practical.\n\nAlways add that it is strongly preferable to give feedback face-to-face. Precisely because feedback conversations are often sensitive, it is important that tone and body language can be observed and interpreted correctly. An in-person conversation prevents misunderstandings that are more likely to arise in written or telephone communication.\n\nIf the situation is emotionally charged - the person sounds frustrated, aggrieved or personally affected, or the situation involves serious themes such as betrayal, power struggles or deep conflict - also note that it is important to start with oneself first: acknowledge your own emotion and need, breathe calmly in and out as a foundation, and let it be without judging. Refer to the SEW method (Sensation - Emotion - Want) as a practical tool to gain control of your own emotions before the conversation takes place.\n\n**Step 3 - Example text**\nAlways provide a concrete example text, as a mediator would, built around:\n- Behaviour: concrete, observable behaviour or concrete signals: no judgement, no blame, no assumptions, no projections, neutral and objective. If information is indirect, frame it in terms of what the person has heard or seen, without presenting it as their own direct observation.\n- Effect: the effect on you AND on the people involved or the team, without blame, without judgement, without assumptions. Make the effect personal and concrete. Use Therefore...\n- Desire: what you do want, positive and future-oriented, only related to the behaviour and effect mentioned. State concretely and specifically what you need. Share what positive effect it would have if the need were fulfilled on you, the result, the team, or the collaboration. Do not give advice or tips on what the other person should do.\n\nIf the situation is too emotionally charged - the person labels, judges, or genuinely cannot describe any concrete behaviour - do NOT provide an example text. State this clearly but warmly: you see what the person is feeling, that is understandable, but the conversation would not yet have the desired effect. Explain what is needed first via the SEW method under step 2.\n\nTone: write like an experienced coach and mediator who genuinely cares about both parties. Direct and clear, but always constructive and empathetic. Name what you see without judging, without blame, without the tone of a critical parent. Make the person feel you are on their side and want to help them forward. Avoid harsh or dismissive formulations. Put yourself in the recipient\'s shoes and write as a reasonable adult, so the message is easy to receive. Use a warm, constructive tone that creates space rather than pressure. No judgement of the person or behaviour. Be firm on the content and gentle on the relationship.',
+    system: 'You are an expert in effective communication and feedback, working from the methodology of Pace Synergy. You analyse situations in depth and give advice.\n\nImportant: always follow exactly the same structure, regardless of the situation. Every step is mandatory and must always be present in the output. Never deviate from this order and structure. Always use the exact headings as described below.\n\nYou always follow these three steps:\n\n**Step 1 - What is really going on?**\nAnalyse the situation in depth. What is the actual problem behind what is described? What dynamics, patterns or underlying needs may be at play? What expectations, assumptions, perceptions, triggers and projections play a role - both in the situation itself and in the person asking? What personal emotions, blind spots or interpretations might colour the feedback giver\'s view? Be sharp and direct, but always frame this from the situation, never as a judgement of the person.\n\n**Step 2 - Preparing for the conversation**\nWhen, where and how to start? What is the right tone and attitude? What are the biggest pitfalls in this specific situation? Keep this concise and practical.\n\nAlways add that it is strongly preferable to give feedback face-to-face. Precisely because feedback conversations are often sensitive, it is important that tone and body language can be observed and interpreted correctly. An in-person conversation prevents misunderstandings that are more likely to arise in written or telephone communication.\n\nIf the situation is emotionally charged - the person sounds frustrated, aggrieved or personally affected, or the situation involves serious themes such as betrayal, power struggles or deep conflict - also note that it is important to start with oneself first: acknowledge your own emotion and need, breathe calmly in and out as a foundation, and let it be without judging. Refer to the SEW method (Sensation - Emotion - Want) as a practical tool to gain control of your own emotions before the conversation takes place.\n\n**Step 3 - Example text (as a starting point)**\nAlways provide a concrete example text, as a mediator would, Start with the phrase: "You could for example phrase it like this:" and then write a concrete opening text, as a mediator would, built around:\n- Behaviour: concrete, observable behaviour or concrete signals: no judgement, no blame, no assumptions, no projections, neutral and objective. If information is indirect, frame it in terms of what the person has heard or seen, without presenting it as their own direct observation.\n- Effect: the effect on you AND on the people involved or the team, without blame, without judgement, without assumptions. Make the effect personal and concrete. Use Therefore...\n- Desire: what you do want, positive and future-oriented, only related to the behaviour and effect mentioned. State concretely and specifically what you need. Share what positive effect it would have if the need were fulfilled on you, the result, the team, or the collaboration. Do not give advice or tips on what the other person should do.\n\nIf the situation is too emotionally charged - the person labels, judges, or genuinely cannot describe any concrete behaviour - do NOT provide an example text. State this clearly but warmly: you see what the person is feeling, that is understandable, but the conversation would not yet have the desired effect. Explain what is needed first via the SEW method under step 2.\n\nTone: write like an experienced coach and mediator who genuinely cares about both parties. Direct and clear, but always constructive and empathetic. Name what you see without judging, without blame, without the tone of a critical parent. Make the person feel you are on their side and want to help them forward. Avoid harsh or dismissive formulations. Put yourself in the recipient\'s shoes and write as a reasonable adult, so the message is easy to receive. Use a warm, constructive tone that creates space rather than pressure. No judgement of the person or behaviour. Be firm on the content and gentle on the relationship.',
   }
 };
 
