@@ -668,6 +668,7 @@
   </p>
 
   <p style="font-size:11px; color:var(--muted); line-height:1.8; text-align:center; margin-top:16px;">
+    Aan het gegenereerde feedbackvoorstel kunnen geen rechten worden ontleend.<br>
     © Pace Synergy — Alle rechten voorbehouden.
   </p>
 
@@ -773,7 +774,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .finally(function() {
       btn.disabled = false;
-      btn.textContent = 'Genereer feedback';
+      btn.textContent = teksten[huidigeTaal].submitBtn; checkAkkoord();
       loader.classList.remove('zichtbaar');
     });
   }
@@ -929,7 +930,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Submit knop
     var btn = document.getElementById('submitBtn');
-    if (btn && !btn.disabled) btn.textContent = t.submitBtn;
+    btn.textContent = t.submitBtn; checkAkkoord();
 
     // Loader tekst (laatste tekstnode)
     var loader = document.querySelector('.loader');
@@ -1034,7 +1035,7 @@ var teksten = {
     resetBtn: '↩ Nieuwe situatie',
     ctaText: 'Wil je meer begeleiding?',
     ctaLink: 'Ontdek de mogelijkheden bij Pace Synergy →',
-    disclaimer: 'Let op: Het (deels) automatisch gegenereerde advies is algemeen van aard en gebaseerd op de door de gebruiker ingevoerde informatie. Het vervangt geen professioneel advies of begeleiding. Aan het advies kunnen geen rechten worden ontleend. Gebruik van deze tool en toepassing van het advies is volledig op eigen verantwoordelijkheid. Pace Synergy is niet aansprakelijk voor enige directe of indirecte schade voortvloeiend uit het gebruik van deze tool of het gegenereerde advies. De kwaliteit van het advies is afhankelijk van de juistheid en volledigheid van de ingevoerde informatie.',
+    disclaimer: 'Aan het gegenereerde feedbackvoorstel kunnen geen rechten worden ontleend.\n© Pace Synergy — Alle rechten voorbehouden.\n\nLet op: Het (deels) automatisch gegenereerde advies is algemeen van aard en gebaseerd op de door de gebruiker ingevoerde informatie. Het vervangt geen professioneel advies of begeleiding. Aan het advies kunnen geen rechten worden ontleend. Gebruik van deze tool en toepassing van het advies is volledig op eigen verantwoordelijkheid. Pace Synergy is niet aansprakelijk voor enige directe of indirecte schade voortvloeiend uit het gebruik van deze tool of het gegenereerde advies. De kwaliteit van het advies is afhankelijk van de juistheid en volledigheid van de ingevoerde informatie.',
     copyright: '© Pace Synergy — Alle rechten voorbehouden. Deze methode en inhoud mogen niet zonder voorafgaande schriftelijke toestemming worden gekopieerd, verspreid of commercieel gebruikt.',
     promptIntro: 'Ik wil feedback geven. Analyseer mijn situatie en geef mij advies.',
     promptRelatie: 'Relatie',
