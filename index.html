@@ -836,29 +836,6 @@ document.addEventListener('DOMContentLoaded', function() {
     return tekst.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   }
 
-  function openModal(e) {
-    if (e) e.preventDefault();
-    document.getElementById('modalOverlay').classList.add('zichtbaar');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function sluitModal(e) {
-    if (e && e.target !== document.getElementById('modalOverlay') &&
-        e.type === 'click' && e.currentTarget === document.getElementById('modalOverlay')) {
-      if (e.target !== document.getElementById('modalOverlay')) return;
-    }
-    document.getElementById('modalOverlay').classList.remove('zichtbaar');
-    document.body.style.overflow = '';
-  }
-
-  function checkAkkoord() {
-    var c1 = document.getElementById('check1');
-    var c2 = document.getElementById('check2');
-    var btn = document.getElementById('submitBtn');
-    if (c1 && c2 && btn) {
-      btn.disabled = !(c1.checked && c2.checked);
-    }
-  }
 
   function resetForm() {
     document.getElementById('situatie').value = '';
@@ -1100,6 +1077,34 @@ var chipVals = {
 };
 
 // Overschrijf getAdvies om taal mee te nemen
+</script>
+<script>
+// Globale functies — toegankelijk vanuit HTML onchange/onclick
+function checkAkkoord() {
+  var c1 = document.getElementById('check1');
+  var c2 = document.getElementById('check2');
+  var btn = document.getElementById('submitBtn');
+  if (c1 && c2 && btn) {
+    btn.disabled = !(c1.checked && c2.checked);
+  }
+}
+
+function openModal(e) {
+  if (e) e.preventDefault();
+  var overlay = document.getElementById('modalOverlay');
+  if (overlay) {
+    overlay.classList.add('zichtbaar');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function sluitModal(e) {
+  var overlay = document.getElementById('modalOverlay');
+  if (!overlay) return;
+  if (e && e.type === 'click' && e.currentTarget === overlay && e.target !== overlay) return;
+  overlay.classList.remove('zichtbaar');
+  document.body.style.overflow = '';
+}
 </script>
 </body>
 </html>
