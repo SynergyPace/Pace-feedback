@@ -629,7 +629,7 @@
   <div class="akkoord-sectie" id="akkoordSectie">
     <label class="akkoord-label">
       <input type="checkbox" id="check1" onchange="checkAkkoord()">
-      <span id="check1tekst">Ik ga akkoord met de <a href="https://www.s-pace.nl/_files/ugd/39909a_03effa5b920b4e76a7bc81138fc4296c.pdf" target="_blank" id="avLink">algemene voorwaarden</a> van Pace Synergy.</span>
+      <span id="check1tekst">Ik ga akkoord met de <a href="https://s-pace.nl/algemene-voorwaarden" target="_blank" id="avLink">algemene voorwaarden</a> van Pace Synergy.</span>
     </label>
     <label class="akkoord-label">
       <input type="checkbox" id="check2" onchange="checkAkkoord()">
@@ -966,10 +966,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var check2tekst = document.getElementById('check2tekst');
     var avLink = document.getElementById('avLink');
     if (taal === 'en') {
-      if (check1tekst) check1tekst.innerHTML = 'I agree with the <a href="https://www.s-pace.nl/_files/ugd/39909a_03effa5b920b4e76a7bc81138fc4296c.pdf" target="_blank" id="avLink">terms and conditions</a> of Pace Synergy.';
+      if (check1tekst) check1tekst.innerHTML = 'I agree with the <a href="https://s-pace.nl/algemene-voorwaarden" target="_blank" id="avLink">terms and conditions</a> of Pace Synergy.';
       if (check2tekst) check2tekst.innerHTML = 'I have read and understood the <a href="#" onclick="openModal(event)" id="modalLink">terms of use</a>, and I understand that the feedback proposal is automatically generated based on my input. It is intended as a starting point — I remain responsible for the interpretation and application.';
     } else {
-      if (check1tekst) check1tekst.innerHTML = 'Ik ga akkoord met de <a href="https://www.s-pace.nl/_files/ugd/39909a_03effa5b920b4e76a7bc81138fc4296c.pdf" target="_blank" id="avLink">algemene voorwaarden</a> van Pace Synergy.';
+      if (check1tekst) check1tekst.innerHTML = 'Ik ga akkoord met de <a href="https://s-pace.nl/algemene-voorwaarden" target="_blank" id="avLink">algemene voorwaarden</a> van Pace Synergy.';
       if (check2tekst) check2tekst.innerHTML = 'Ik heb de <a href="#" onclick="openModal(event)" id="modalLink">gebruiksvoorwaarden</a> gelezen en begrepen, en ik begrijp dat het feedbackvoorstel automatisch wordt gegenereerd op basis van mijn invoer. Het is bedoeld als startpunt — ik blijf zelf verantwoordelijk voor de interpretatie en toepassing.';
     }
 
