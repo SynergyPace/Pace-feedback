@@ -20,7 +20,38 @@
     --text-sec: #6B5E52;
     --radius: 10px;
     --radius-lg: 16px;
+    --donker: #003a40;
+    --goud: #D4A866;
+    --goud-licht: #e8c98a;
   }
+
+  /* ── NAVIGATIE ── */
+  .nav {
+    background: var(--donker);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+  .nav-logo img { height: 34px; width: auto; }
+  .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+  .nav-links a { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.75); text-decoration: none; padding: 6px 11px; border-radius: 6px; transition: all 0.15s ease; white-space: nowrap; }
+  .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.07); }
+  .nav-links a.actief { color: var(--goud); }
+  .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .nav-toggle span { display: block; width: 22px; height: 2px; background: rgba(255,255,255,0.8); border-radius: 2px; }
+  .nav-mobiel { display: none; flex-direction: column; background: var(--donker); padding: 12px 24px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+  .nav-mobiel a { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .nav-mobiel a:last-child { border-bottom: none; }
+  .nav-mobiel a.actief { color: var(--goud); }
+  .nav-mobiel.open { display: flex; }
+  @media (max-width: 860px) { .nav-links { display: none; } .nav-toggle { display: flex; } }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -534,20 +565,46 @@
 </head>
 <body>
 
-<header class="site-header">
-  <div class="site-header-inner">
-    <a class="logo" href="https://www.s-pace.nl">Pace <span>Synergy</span></a>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <a class="header-link" href="https://www.s-pace.nl/contact" id="contactLink">Contact</a>
-      <div class="taal-switch">
-        <button class="taal-btn actief" id="btnNL" title="Nederlands">NL</button>
-        <button class="taal-btn" id="btnEN" title="English">EN</button>
-      </div>
-    </div>
-  </div>
+<!-- NAVIGATIE -->
+<header>
+  <nav class="nav">
+    <a href="https://www.s-pace.nl" class="nav-logo">
+      <img src="https://static.wixstatic.com/media/39909a_17be639f10bc48979adbbf9fdc76e6d2~mv2.png/v1/fill/w_50,h_50,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Logo%20zonder%20tekst.png" alt="Pace logo">
+      <img src="https://static.wixstatic.com/media/39909a_c635089683d543b5bb016ccb45e066fd~mv2.png/v1/fill/w_79,h_45,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/39909a_c635089683d543b5bb016ccb45e066fd~mv2.png" alt="Pace">
+    </a>
+    <ul class="nav-links">
+      <li><a href="https://www.s-pace.nl">Home</a></li>
+      <li><a href="https://tools.s-pace.nl" class="actief">Tools</a></li>
+      <li><a href="https://www.s-pace.nl/diensten">Diensten</a></li>
+      <li><a href="https://www.s-pace.nl/feedback-tool">Feedback Tool</a></li>
+      <li><a href="https://www.s-pace.nl/over-pace">Over Pace</a></li>
+      <li><a href="https://www.s-pace.nl/werkwijze">Werkwijze</a></li>
+      <li><a href="https://www.s-pace.nl/blog">Blog</a></li>
+      <li><a href="https://www.s-pace.nl/contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" onclick="this.nextElementSibling.classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <nav class="nav-mobiel">
+    <a href="https://www.s-pace.nl">Home</a>
+    <a href="https://tools.s-pace.nl" class="actief">Tools</a>
+    <a href="https://www.s-pace.nl/diensten">Diensten</a>
+    <a href="https://www.s-pace.nl/feedback-tool">Feedback Tool</a>
+    <a href="https://www.s-pace.nl/over-pace">Over Pace</a>
+    <a href="https://www.s-pace.nl/werkwijze">Werkwijze</a>
+    <a href="https://www.s-pace.nl/blog">Blog</a>
+    <a href="https://www.s-pace.nl/contact">Contact</a>
+  </nav>
 </header>
 
 <section class="hero">
+  <div style="position:absolute;top:16px;right:clamp(20px,5vw,48px);z-index:10;">
+    <div class="taal-switch">
+      <button class="taal-btn actief" id="btnNL" title="Nederlands">NL</button>
+      <button class="taal-btn" id="btnEN" title="English">EN</button>
+    </div>
+  </div>
   <div class="hero-inner">
     <h1>Feedback geven<br>zonder dat het<br><em>kritiek</em> wordt</h1>
     <p>Beantwoord vijf vragen en krijg direct richting voor je gesprek, met een voorbeeldtekst als startpunt om je eigen boodschap helder te formuleren.</p>
