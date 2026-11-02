@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
           </div>
           <p style="color: #888; font-size: 13px;">Of kopieer deze link: ${link}</p>
           <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
-          <p style="color: #888; font-size: 12px;">© Pace Synergy — scan.s-pace.nl</p>
+          <p style="color: #888; font-size: 12px;">© Pace Synergy — scan.pacesynergy.nl</p>
         </div>
       `
     })
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
           <p>Je antwoorden voor het Synergy Assessment (<strong>${opdrachtnaam}</strong>) zijn ontvangen.</p>
           <p>De resultaten worden na afloop door Pace Synergy met je gedeeld.</p>
           <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
-          <p style="color: #888; font-size: 12px;">© Pace Synergy — scan.s-pace.nl</p>
+          <p style="color: #888; font-size: 12px;">© Pace Synergy — scan.pacesynergy.nl</p>
         </div>
       `
     })

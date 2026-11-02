@@ -568,33 +568,33 @@
 <!-- NAVIGATIE -->
 <header>
   <nav class="nav">
-    <a href="https://www.s-pace.nl" class="nav-logo">
+    <a href="https://www.pacesynergy.nl" class="nav-logo">
       <img src="https://static.wixstatic.com/media/39909a_17be639f10bc48979adbbf9fdc76e6d2~mv2.png/v1/fill/w_50,h_50,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Logo%20zonder%20tekst.png" alt="Pace logo">
       <img src="https://static.wixstatic.com/media/39909a_c635089683d543b5bb016ccb45e066fd~mv2.png/v1/fill/w_79,h_45,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/39909a_c635089683d543b5bb016ccb45e066fd~mv2.png" alt="Pace">
     </a>
     <ul class="nav-links">
-      <li><a href="https://www.s-pace.nl">Home</a></li>
-      <li><a href="https://tools.s-pace.nl" class="actief">Tools</a></li>
-      <li><a href="https://www.s-pace.nl/diensten">Diensten</a></li>
-      <li><a href="https://www.s-pace.nl/feedback-tool">Feedback Tool</a></li>
-      <li><a href="https://www.s-pace.nl/over-pace">Over Pace</a></li>
-      <li><a href="https://www.s-pace.nl/werkwijze">Werkwijze</a></li>
-      <li><a href="https://www.s-pace.nl/blog">Blog</a></li>
-      <li><a href="https://www.s-pace.nl/contact">Contact</a></li>
+      <li><a href="https://www.pacesynergy.nl">Home</a></li>
+      <li><a href="https://tools.pacesynergy.nl" class="actief">Tools</a></li>
+      <li><a href="https://www.pacesynergy.nl/diensten">Diensten</a></li>
+      <li><a href="https://www.pacesynergy.nl/feedback-tool">Feedback Tool</a></li>
+      <li><a href="https://www.pacesynergy.nl/over-pace">Over Pace</a></li>
+      <li><a href="https://www.pacesynergy.nl/werkwijze">Werkwijze</a></li>
+      <li><a href="https://www.pacesynergy.nl/blog">Blog</a></li>
+      <li><a href="https://www.pacesynergy.nl/contact">Contact</a></li>
     </ul>
     <button class="nav-toggle" onclick="this.nextElementSibling.classList.toggle('open')" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </nav>
   <nav class="nav-mobiel">
-    <a href="https://www.s-pace.nl">Home</a>
-    <a href="https://tools.s-pace.nl" class="actief">Tools</a>
-    <a href="https://www.s-pace.nl/diensten">Diensten</a>
-    <a href="https://www.s-pace.nl/feedback-tool">Feedback Tool</a>
-    <a href="https://www.s-pace.nl/over-pace">Over Pace</a>
-    <a href="https://www.s-pace.nl/werkwijze">Werkwijze</a>
-    <a href="https://www.s-pace.nl/blog">Blog</a>
-    <a href="https://www.s-pace.nl/contact">Contact</a>
+    <a href="https://www.pacesynergy.nl">Home</a>
+    <a href="https://tools.pacesynergy.nl" class="actief">Tools</a>
+    <a href="https://www.pacesynergy.nl/diensten">Diensten</a>
+    <a href="https://www.pacesynergy.nl/feedback-tool">Feedback Tool</a>
+    <a href="https://www.pacesynergy.nl/over-pace">Over Pace</a>
+    <a href="https://www.pacesynergy.nl/werkwijze">Werkwijze</a>
+    <a href="https://www.pacesynergy.nl/blog">Blog</a>
+    <a href="https://www.pacesynergy.nl/contact">Contact</a>
   </nav>
 </header>
 
@@ -686,7 +686,7 @@
   <div class="akkoord-sectie" id="akkoordSectie">
     <label class="akkoord-label">
       <input type="checkbox" id="check1" onchange="checkAkkoord()">
-      <span id="check1tekst">Ik ga akkoord met de <a href="https://s-pace.nl/algemene-voorwaarden" target="_blank" id="avLink">algemene voorwaarden</a> van Pace Synergy.</span>
+      <span id="check1tekst">Ik ga akkoord met de <a href="https://www.pacesynergy.nl/algemene-voorwaarden" target="_blank" id="avLink">algemene voorwaarden</a> van Pace Synergy.</span>
     </label>
     <label class="akkoord-label">
       <input type="checkbox" id="check2" onchange="checkAkkoord()">
@@ -721,7 +721,7 @@
 
   <p style="font-size:13px; color:var(--muted); line-height:1.8; text-align:center;">
     Wil je meer begeleiding?<br>
-    <a href="https://www.s-pace.nl" style="color:var(--warm);">Ontdek de mogelijkheden bij Pace Synergy →</a>
+    <a href="https://www.pacesynergy.nl" style="color:var(--warm);">Ontdek de mogelijkheden bij Pace Synergy →</a>
   </p>
 
   <p id="footerDisclaimer" style="font-size:11px; color:var(--muted); line-height:1.8; text-align:center; margin-top:16px;">
@@ -1019,10 +1019,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var check2tekst = document.getElementById('check2tekst');
     var avLink = document.getElementById('avLink');
     if (taal === 'en') {
-      if (check1tekst) check1tekst.innerHTML = 'I agree with the <a href="https://s-pace.nl/algemene-voorwaarden" target="_blank" id="avLink">terms and conditions</a> of Pace Synergy.';
+      if (check1tekst) check1tekst.innerHTML = 'I agree with the <a href="https://www.pacesynergy.nl/algemene-voorwaarden" target="_blank" id="avLink">terms and conditions</a> of Pace Synergy.';
       if (check2tekst) check2tekst.innerHTML = 'I have read and understood the <a href="#" onclick="openModal(event)" id="modalLink">terms of use</a>, and I understand that the feedback proposal is automatically generated based on my input. It is intended as a starting point — I remain responsible for the interpretation and application.';
     } else {
-      if (check1tekst) check1tekst.innerHTML = 'Ik ga akkoord met de <a href="https://s-pace.nl/algemene-voorwaarden" target="_blank" id="avLink">algemene voorwaarden</a> van Pace Synergy.';
+      if (check1tekst) check1tekst.innerHTML = 'Ik ga akkoord met de <a href="https://www.pacesynergy.nl/algemene-voorwaarden" target="_blank" id="avLink">algemene voorwaarden</a> van Pace Synergy.';
       if (check2tekst) check2tekst.innerHTML = 'Ik heb de <a href="#" onclick="openModal(event)" id="modalLink">gebruiksvoorwaarden</a> gelezen en begrepen, en ik begrijp dat het feedbackvoorstel automatisch wordt gegenereerd op basis van mijn invoer. Het is bedoeld als startpunt — ik blijf zelf verantwoordelijk voor de interpretatie en toepassing.';
     }
 
