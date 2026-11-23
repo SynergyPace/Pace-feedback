@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Feedback Geven — Pace Synergy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Nunito+Sans:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --black: #003a40;
@@ -25,36 +25,37 @@
     --goud-licht: #e8c98a;
   }
 
-  /* ── NAVIGATIE ── */
+  /* ── NAVIGATIE — zelfde stijl als de header van pacesynergy.nl ── */
   .nav {
-    background: var(--donker);
-    padding: 0 32px;
+    background: #FFFFFF;
+    padding: 0 32px 0 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    height: 96px;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+    box-shadow: 0 1px 0 rgba(0,58,64,0.08);
   }
-  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-  .nav-logo img { height: 34px; width: auto; }
-  .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
-  .nav-links a { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.75); text-decoration: none; padding: 6px 11px; border-radius: 6px; transition: all 0.15s ease; white-space: nowrap; }
-  .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.07); }
-  .nav-links a.actief { color: var(--goud); }
-  .nav-links a.nav-cta { background: var(--goud); color: var(--donker); font-weight: 700; padding: 8px 16px; margin-left: 10px; }
-  .nav-links a.nav-cta:hover { background: var(--goud-licht); color: var(--donker); }
-  .nav-mobiel a.nav-cta-mobiel { color: var(--goud); font-weight: 700; }
+  .nav-logo { display: flex; align-items: stretch; height: 100%; text-decoration: none; flex-shrink: 0; }
+  .nav-logo img { height: 96px; width: auto; display: block; }
+  .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+  .nav-links a { font-family: 'Nunito Sans', 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; line-height: 22px; color: #16292C; text-decoration: none; padding: 9px 14px; border-radius: 20px; transition: background 0.15s ease; white-space: nowrap; }
+  .nav-links a:hover { background: rgba(242,225,196,0.55); }
+  .nav-links a.actief { background: #F2E1C4; color: var(--donker); }
+  .nav-links a.nav-cta { background: var(--donker); color: #FFFFFF; font-weight: 700; padding: 9px 22px; border-radius: 6px; margin-left: 16px; }
+  .nav-links a.nav-cta:hover { background: #0B4A51; color: var(--goud); }
   .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
-  .nav-toggle span { display: block; width: 22px; height: 2px; background: rgba(255,255,255,0.8); border-radius: 2px; }
-  .nav-mobiel { display: none; flex-direction: column; background: var(--donker); padding: 12px 24px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
-  .nav-mobiel a { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .nav-toggle span { display: block; width: 22px; height: 2px; background: var(--donker); border-radius: 2px; }
+  .nav-mobiel { display: none; flex-direction: column; background: #FFFFFF; padding: 8px 24px 20px; border-top: 1px solid rgba(0,58,64,0.08); box-shadow: 0 8px 16px rgba(0,58,64,0.08); }
+  .nav-mobiel a { font-family: 'Nunito Sans', 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; color: #16292C; text-decoration: none; padding: 12px 10px; border-bottom: 1px solid rgba(0,58,64,0.06); }
   .nav-mobiel a:last-child { border-bottom: none; }
-  .nav-mobiel a.actief { color: var(--goud); }
+  .nav-mobiel a.actief { background: #F2E1C4; border-radius: 20px; }
+  .nav-mobiel a.nav-cta-mobiel { background: var(--donker); color: #FFFFFF; font-weight: 700; text-align: center; border-radius: 6px; margin-top: 12px; }
   .nav-mobiel.open { display: flex; }
-  @media (max-width: 860px) { .nav-links { display: none; } .nav-toggle { display: flex; } }
+  @media (max-width: 1100px) { .nav-links { display: none; } .nav-toggle { display: flex; } }
+  @media (max-width: 600px) { .nav { height: 72px; padding-right: 20px; } .nav-logo img { height: 72px; } }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -571,9 +572,8 @@
 <!-- NAVIGATIE -->
 <header>
   <nav class="nav">
-    <a href="https://www.pacesynergy.nl" class="nav-logo">
-      <img src="https://static.wixstatic.com/media/39909a_17be639f10bc48979adbbf9fdc76e6d2~mv2.png/v1/fill/w_50,h_50,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Logo%20zonder%20tekst.png" alt="Pace logo">
-      <img src="https://static.wixstatic.com/media/39909a_c635089683d543b5bb016ccb45e066fd~mv2.png/v1/fill/w_79,h_45,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/39909a_c635089683d543b5bb016ccb45e066fd~mv2.png" alt="Pace">
+    <a href="https://www.pacesynergy.nl" class="nav-logo" aria-label="Pace Synergy — naar de homepage">
+      <img src="https://static.wixstatic.com/media/39909a_8774a13abcfa4265b0371ebd9e81d692~mv2.png/v1/fill/w_494,h_192,al_c,q_90,enc_avif,quality_auto/pace-header-merkvlak.png" alt="Pace Synergy" width="247" height="96">
     </a>
     <ul class="nav-links">
       <li><a href="https://www.pacesynergy.nl/teamontwikkeling">Teamontwikkeling</a></li>
